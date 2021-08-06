@@ -1,4 +1,4 @@
-package com.oguzcan.model;
+package com.oguzcan.dto;
 
 public class TestClass {
 
@@ -10,12 +10,12 @@ public class TestClass {
 //		test.basicAccount();
 //		test.businessAccount();
 		test.personalInformation();
+		
 	}
-	
 	
 	public void customerTest() {
 		
-		Customer custom = new Customer.Builder().username("oguzcan").password("12345").build();
+		CustomerDTO custom = new CustomerDTO.Builder().username("oguzcan").password("12345").build();
 		
 		System.out.println(custom);
 		
@@ -28,17 +28,17 @@ public class TestClass {
 	}
 	
 	public void basicAccount() {
-		Account acc = new BasicAccount.Builder().accNumber(1122).balance(2222).build();
+		AccountDTO acc = new BasicAccountDTO.Builder().accNumber(1122).balance(2222).build();
 		System.out.println(acc);
 	}
 	
 	public void businessAccount() {
-		BusinessAccount acc = new BusinessAccount.Builder().accNumber(2223).balance(9999).build();
+		BusinessAccountDTO acc = new BusinessAccountDTO.Builder().accNumber(2223).balance(9999).build();
 		System.out.println(acc);
 	}
 	
 	public void personalInformation() {
-		PersonalInformation info = new PersonalInformation.Builder().name("oguzcan").lastname("bicer").phoneNumber("05111111111").build();
+		PersonalInformationDTO info = new PersonalInformationDTO.Builder().name("oguzcan").lastname("bicer").phoneNumber("05111111111").build();
 		System.out.println(info);
 	}
 }

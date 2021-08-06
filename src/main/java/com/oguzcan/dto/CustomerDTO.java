@@ -1,32 +1,35 @@
-package com.oguzcan.model;
+package com.oguzcan.dto;
 
 import java.io.Serializable;
 import java.util.Set;
 
-public class Customer implements Serializable {
+public class CustomerDTO implements Serializable, Client {
 	private static final long serialVersionUID = -898475110260482733L;
 
-	private Set<Account> accountList;
+	private Set<AccountDTO> accountList;
 	private String username;
 	private String password;
-	private PersonalInformation info;
+	private PersonalInformationDTO info;
 
-	public Customer(Builder builder) {
+	public CustomerDTO(Builder builder) {
 		this.accountList = builder.accountList;
 		this.username = builder.username;
 		this.password = builder.password;
 		this.info = builder.info;
 	}
+	public CustomerDTO() {
+		
+	}
 
 //  ############################### INNER CLASS ################################
 	public static class Builder {
-		private Set<Account> accountList;
+		private Set<AccountDTO> accountList;
 		private String username;
 		private String password;
-		private PersonalInformation info;
+		private PersonalInformationDTO info;
 
 		
-		public Builder accountList(Set<Account> accountList) {
+		public Builder accountList(Set<AccountDTO> accountList) {
 			this.accountList = accountList;
 			return this;
 		}
@@ -38,20 +41,20 @@ public class Customer implements Serializable {
 			this.password = password;
 			return this;
 		}
-		public Builder info(PersonalInformation info) {
+		public Builder info(PersonalInformationDTO info) {
 			this.info = info;
 			return this;
 		}
-		public Customer build() {
-			return new Customer(this);
+		public CustomerDTO build() {
+			return new CustomerDTO(this);
 		}
 	}
 
 //	######################  GETTER & SETTER ################################
-	public Set<Account> getAccountList() {
+	public Set<AccountDTO> getAccountList() {
 		return accountList;
 	}
-	public void setAccountList(Set<Account> accountList) {
+	public void setAccountList(Set<AccountDTO> accountList) {
 		this.accountList = accountList;
 	}
 	public String getUsername() {
@@ -66,10 +69,10 @@ public class Customer implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public PersonalInformation getInfo() {
+	public PersonalInformationDTO getInfo() {
 		return info;
 	}
-	public void setInfo(PersonalInformation info) {
+	public void setInfo(PersonalInformationDTO info) {
 		this.info = info;
 	}
 
