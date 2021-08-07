@@ -1,32 +1,34 @@
-package com.oguzcan.model;
+package com.oguzcan.dto;
 
 import java.io.Serializable;
 
-public class BasicAccount extends Account implements Serializable{
+public class BasicAccountDTO extends AccountDTO implements Serializable{
 	private static final long serialVersionUID = 8327228743131606428L;
 
 
-	public BasicAccount(Builder builder) {
+	public BasicAccountDTO(Builder builder) {
 		super.setAccNumber(builder.accNumber);
 		super.setBalance(builder.balance);
 	}
-	
+	public BasicAccountDTO() {
+		
+	}
 	
 //  ############################### INNER CLASS ################################
 	public static class Builder {
-		private long accNumber;
+		private int accNumber;
 		private double balance;
 		
-		public Builder accNumber(long accNumber) {
+		public Builder accNumber(int accNumber) {
 			this.accNumber = accNumber;
 			return this;
 		}
-		public Builder balance(long balance) {
+		public Builder balance(double balance) {
 			this.balance = balance;
 			return this;
 		}
-		public BasicAccount build() {
-			return new BasicAccount(this);
+		public BasicAccountDTO build() {
+			return new BasicAccountDTO(this);
 		}
 	}
 }
