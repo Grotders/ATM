@@ -3,7 +3,7 @@ package com.oguzcan.controller;
 
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.NoSuchClientException;
-import com.oguzcan.ex.WrongCustomerCredentialsException;
+import com.oguzcan.ex.WrongClientCredentialsException;
 import com.oguzcan.service.AdminLoginService;
 import com.oguzcan.service.LoginService;
 import com.oguzcan.view.BankView;
@@ -29,12 +29,12 @@ public class BankController {
 			System.out.print("sifre: ");
 			String password = input.nextString();
 			loginService.login(username, password);
- */
+ */			
 			admin = (AdminDTO) loginService.login("oguzcan", "12345");
 
 			
 			System.out.println("Giriş başarılı! Yönlendiriliyorsunuz ...");
-		} catch (WrongCustomerCredentialsException ex) {
+		} catch (WrongClientCredentialsException ex) {
 			System.out.println(ex.getMessage());
 		} catch (NoSuchClientException ex) {
 			System.out.println(ex.getMessage());

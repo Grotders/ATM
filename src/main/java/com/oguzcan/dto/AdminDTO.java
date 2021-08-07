@@ -29,7 +29,7 @@ public class AdminDTO implements Client{
 			this.password = password;
 			return this;
 		}
-		public AdminDTO builder() {
+		public AdminDTO build() {
 			return new AdminDTO(this);
 		}
 	}

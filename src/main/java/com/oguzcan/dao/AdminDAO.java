@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import com.oguzcan.controller.InputController;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
 import com.oguzcan.ex.NoSuchClientException;
@@ -25,31 +24,51 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			stmt.setString(1, admin.getUsername());
 			stmt.setString(2, admin.getPassword());
 			stmt.executeUpdate();
-			
 			System.out.println("Kullanıcı başarıyla oluşturuldu.");
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
 		} catch (SQLException ex) {
 			System.out.println("AdminDAO create sqlException.");
 		}
-		
 	}
 
 	@Override
-	public void update(AdminDTO admin) {
-		// TODO Auto-generated method stub
+	public void update(AdminDTO admin, int id) {
+		String sql = "update mydb.admin set username=?, password=? where id=?";
 		
+		try(Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, admin.getUsername());
+			stmt.setString(2, admin.getPassword());
+			stmt.setInt(3, id);
+			stmt.executeUpdate();
+			System.out.println("Güncelleme başarılı.");
+		} catch(SQLException ex) {
+			System.out.println("hata update");
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	@Override
-	public void delete(AdminDTO admin) {
-		// TODO Auto-generated method stub
-		
+	public void delete(AdminDTO admin) throws NoSuchClientException{
+		String sql = "delete from mydb.admin where username=?";
+
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, admin.getUsername());
+			stmt.executeUpdate();
+			System.out.println("Kullanıcı başarıyla silindi.");
+		} catch (SQLException ex) {
+			System.out.println("hata delete");
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	@Override
 	public AdminDTO retrieve(String input) throws NoSuchClientException{
-		String sql = "select * from mydb.admin where admin.username=?";
+		String sql = "select * from mydb.admin where username=?";
 		
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
@@ -58,7 +77,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			
 			while(rs.next()) {
 				adminDto = new AdminDTO.Builder()
-						.username(rs.getString("username")).password(rs.getString("password")).builder();
+						.username(rs.getString("username")).password(rs.getString("password")).build();
 			}
 			if(adminDto == null) {
 				throw new NoSuchClientException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
@@ -66,41 +85,47 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 		} catch (SQLException ex) {
 			System.out.println(ex);
 		}
-		
 		return adminDto;
 	}
 
 	@Override
-	public void refresh(AdminDTO admin) {
-		// TODO Auto-generated method stub
+	public AdminDTO retrieveById(int id) {
+		String sql = "select * from mydb.admin where admin_id";
 		
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				adminDto = new AdminDTO.Builder()
+						.username(rs.getString("username")).password(rs.getString("password")).build();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex);
+		}
+		return adminDto;
 	}
 
-	public static void main(String[] args) {
-		AdminDAO dao = new AdminDAO();
-		InputController input = new InputController();
+
+	public int bringId(AdminDTO admin) throws NoSuchClientException {
+		String sql = "select admin_id from mydb.admin where username=?";
+		int id = 0;
 		
-		
-		
-		while (true)
-			try {
-				System.out.print("Kullanıcı: ");
-				String username = input.nextString();
-				System.out.print("Sifre: ");
-				String pass = input.nextString();
-				
-				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).builder();
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, admin.getUsername());
+			rs = stmt.executeQuery();
 			
-				dao.create(adminTest);
-				break;
-			} catch (ClientAlreadyExistsException ex) {
-				System.out.println(ex.getMessage());
-				continue;
+			while(rs.next()) {
+				id = rs.getInt("admin_id");
+			}
+			if(id == 0) {
+				throw new NoSuchClientException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex);
 		}
-		
-		
+		return id;
 	}
-	
-	
-	
 }

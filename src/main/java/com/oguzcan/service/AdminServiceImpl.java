@@ -1,5 +1,13 @@
 package com.oguzcan.service;
 
-public class AdminServiceImpl {
+import com.oguzcan.factory.AdminFactory;
 
+public class AdminServiceImpl implements AdminService{
+
+	private AdminFactory aFactory;
+	
+	
+	public void create() {
+		
+	}
 }
