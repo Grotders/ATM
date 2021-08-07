@@ -1,7 +1,11 @@
 package com.oguzcan.service;
 
-public interface LoginService {
+import com.oguzcan.dto.Client;
+import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.WrongCustomerCredentialsException;
+
+public interface LoginService <T extends Client> {
 	
-	public void login(String username, String password);
+	public T login(String username, String password) throws WrongCustomerCredentialsException, NoSuchClientException;
 	public void logout();
 }

@@ -4,10 +4,12 @@ public class AdminDTO implements Client{
 
 	private String username;
 	private String password;
+	private boolean loggedIn;
 	
 	public AdminDTO(Builder builder) {
 		this.username = builder.username;
 		this.password = builder.password;
+		this.loggedIn = false;
 	}
 	
 	public AdminDTO() {

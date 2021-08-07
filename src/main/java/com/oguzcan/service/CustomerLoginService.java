@@ -1,14 +1,16 @@
 package com.oguzcan.service;
 
-public class CustomerLoginService implements LoginService{
+import com.oguzcan.dto.CustomerDTO;
+
+public class CustomerLoginService implements LoginService<CustomerDTO>{
 
 	
 	
 	@Override
-	public void login(String username, String password) {
+	public CustomerDTO login(String username, String password) {
 		
 		
-		
+		return new CustomerDTO();
 	}
 
 	@Override

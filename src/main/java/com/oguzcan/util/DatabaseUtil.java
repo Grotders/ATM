@@ -18,11 +18,11 @@ public class DatabaseUtil {
 
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
-					System.out.println("Driver başarılı bir şekilde yüklendi");
+					//System.out.println("Driver başarılı bir şekilde yüklendi");
 					connection = DriverManager.getConnection(url, user, password);
-					System.out.println("Bağlantı başarılı bir şekilde gerçekleştirildi.");
+					//System.out.println("Bağlantı başarılı bir şekilde gerçekleştirildi.");
 				} catch (ClassNotFoundException | SQLException e) {
-					System.out.println("ClassNotFoundException fırlattım");
+					System.out.println("DatabaseUtil fırlattım");
 					e.printStackTrace();
 				}
 			}
