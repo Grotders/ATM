@@ -52,6 +52,7 @@ public class BankController {
 		
 		redirecting();
 		adminPanel();
+		
 	}
 	
 	private void redirecting() {
@@ -72,12 +73,11 @@ public class BankController {
 		while(true) {
 			switch(input.nextInt()) {
 				case 1: createPanel(); break loop;	// Enum yapısı eklenecek
-				case 2: updatePanel(); break loop;
-				case 3: updatePanel(); break loop;
-				case 4: deletePanel(); break loop;
-//				case DELETE.getNum(): deletePanel(); break loop; 		// must be constant
-//				case DELETE: deletePanel(); break loop;	 				// cannot convert from enum to int
-//				case CREATE.ordinal(): deletePanel(); break loop;		// must be constant
+				case 2: fetchPanel(); break loop;
+
+//				case FETCH.getNum(): fetchPanel(); break loop; 			// must be constant
+//				case FETCH: fetchPanel(); break loop;	 				// cannot convert from enum to int
+//				case CREATE.ordinal(): createPanel(); break loop;		// must be constant
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
 			}
 /*		
@@ -105,18 +105,23 @@ public class BankController {
 		}
 	}
 	private void createAdminPanel() {
-		view.displayAdminCreateAdminPanel();
-		System.out.print("Kullanıcı adı: ");
+		view.displayCreateAdminPanel();
+/*		System.out.print("Kullanıcı adı: ");
 		String username = input.nextString();
 		System.out.print("Şifre: ");
 		String password = input.nextString();
+*/
+// bu yapı kafa karıştırıcı mı?
+		String username = input.nextString("Kullanıcı adı: ");
+		String password = input.nextString("Şifre: ");
 		
 		AdminDTO admin = aFactory.create(username, password);
 		
-		
+//		service -> dao
 	}
 	private void createCustomerPanel() {
-		view.displayAdminCreateCustomerPanel();
+		view.displayCreateCustomerPanel();
+		
 		System.out.print("Kullanıcı adı: ");
 		String username = input.nextString();
 		System.out.print("Şifre: ");
@@ -130,17 +135,29 @@ public class BankController {
 		
 		CustomerDTO customer = cFactory.create(username, password, name, lastname, phoneNumber);
 		
+		// controller -> view -> controller -> factory -> controller -> service -> dao
 		
+		// temel motivasyon controller methodları hariç tüm methodlar sadece bir iş yaparak SRP ye uymalılar.
 	}
 	
-	
-	private void updatePanel() {
-			
-		}
-	private void deletePanel() {
-		
-	}
 	private void fetchPanel() {
+		view.displayAdminFetchPanel();
 		
+		loop:
+			while(true) {
+				switch(input.nextInt()) {
+					case 1: fetchAdminPanel(); break loop;
+					case 2: fetchCustomerPanel(); break loop;
+					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
+				}
+			}
+	}
+	
+	private void fetchAdminPanel() {
+		view.displayAdminListPanel(null);
+	}
+	
+	private void fetchCustomerPanel() {
+		view.displayCustomerListPanel();
 	}
 }

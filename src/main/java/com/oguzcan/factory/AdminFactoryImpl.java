@@ -7,7 +7,8 @@ public class AdminFactoryImpl implements AdminFactory{
 	
 	@Override
 	public AdminDTO create(String username, String password) {
-		AdminDTO admin = new AdminDTO.Builder().username(username).password(password).build();
+		AdminDTO admin = new AdminDTO.Builder()
+				.username(username).password(password).build();
 		
 		return admin;
 	}

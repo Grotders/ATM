@@ -12,6 +12,13 @@ public class InputController {
 		
 		return input;
 	}
+	public String nextString(String text) {
+		System.out.print(text);
+		Scanner keyboard = new Scanner(System.in);
+		String input = keyboard.nextLine();
+		
+		return input;
+	}
 	
 	// keyboard.close() ekleyince çöküyor kod.
 	public int nextInt() {
