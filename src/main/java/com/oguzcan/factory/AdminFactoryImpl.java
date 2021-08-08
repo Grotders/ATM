@@ -6,10 +6,10 @@ public class AdminFactoryImpl implements AdminFactory{
 	private AdminDTO admin;
 	
 	@Override
-	public void create() {
+	public AdminDTO create(String username, String password) {
+		AdminDTO admin = new AdminDTO.Builder().username(username).password(password).build();
 		
-		
-		
+		return admin;
 	}
 
 }

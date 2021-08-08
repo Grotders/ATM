@@ -2,19 +2,28 @@ package com.oguzcan.controller;
 
 
 import com.oguzcan.dto.AdminDTO;
+import com.oguzcan.dto.CustomerDTO;
 import com.oguzcan.ex.NoSuchClientException;
 import com.oguzcan.ex.WrongClientCredentialsException;
+import com.oguzcan.factory.AccountFactory;
+import com.oguzcan.factory.AdminFactory;
+import com.oguzcan.factory.CustomerFactory;
 import com.oguzcan.service.AdminLoginService;
 import com.oguzcan.service.LoginService;
 import com.oguzcan.view.BankView;
 
 public class BankController {
 	private final BankView view = new BankView();
-	private final LoginService loginService = new AdminLoginService();
+	private final LoginService<AdminDTO> loginService = new AdminLoginService();
 	private final InputController input = new InputController();
+	private AdminFactory aFactory;
+	private CustomerFactory cFactory;
+	private AccountFactory acFactory;
 	
+	
+	// Logged in user 
 	private AdminDTO admin;
-//	enum Menu {CREATE, UPDATE, DELETE, FETCH;}
+
 	
 	public void init() {
 		view.displayWelcome();
@@ -30,7 +39,7 @@ public class BankController {
 			String password = input.nextString();
 			loginService.login(username, password);
  */			
-			admin = (AdminDTO) loginService.login("oguzcan", "12345");
+			admin = loginService.login("oguzcan", "12345");
 
 			
 			System.out.println("Giriş başarılı! Yönlendiriliyorsunuz ...");
@@ -57,6 +66,8 @@ public class BankController {
 	private void adminPanel() {
 		view.displayAdminPanel();
 		
+//		System.out.println(CREATE.ordinal()); // çalışıyor
+//		System.out.println(DELETE.getNum()); // çalışıyor
 		loop:
 		while(true) {
 			switch(input.nextInt()) {
@@ -64,8 +75,20 @@ public class BankController {
 				case 2: updatePanel(); break loop;
 				case 3: updatePanel(); break loop;
 				case 4: deletePanel(); break loop;
+//				case DELETE.getNum(): deletePanel(); break loop; 		// must be constant
+//				case DELETE: deletePanel(); break loop;	 				// cannot convert from enum to int
+//				case CREATE.ordinal(): deletePanel(); break loop;		// must be constant
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
 			}
+/*		
+			switch(input.nextInt()) {				// java 14 özelliği eklenmiyor java 8'e
+			case CREATE)-> createPanel(); 	
+			case UPDATE-> updatePanel(); 
+			case DELETE-> deletePanel(); 
+			case FETCH-> fetchPanel(); 
+			default-> System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
+		}
+*/
 		}
 	}
 
@@ -82,19 +105,34 @@ public class BankController {
 		}
 	}
 	private void createAdminPanel() {
-		AdminDTO.Builder temp = new AdminDTO.Builder();
-		
 		view.displayAdminCreateAdminPanel();
-		System.out.print("kullanıcı adı: ");
+		System.out.print("Kullanıcı adı: ");
 		String username = input.nextString();
-		System.out.print("şifre: ");
+		System.out.print("Şifre: ");
 		String password = input.nextString();
+		
+		AdminDTO admin = aFactory.create(username, password);
 		
 		
 	}
 	private void createCustomerPanel() {
+		view.displayAdminCreateCustomerPanel();
+		System.out.print("Kullanıcı adı: ");
+		String username = input.nextString();
+		System.out.print("Şifre: ");
+		String password = input.nextString();
+		System.out.print("Müşteri adı: ");
+		String name = input.nextString();
+		System.out.print("Müşteri soyadı: ");
+		String lastname = input.nextString();
+		System.out.print("Müşteri telefon numarası: ");
+		String phoneNumber = input.nextString();
+		
+		CustomerDTO customer = cFactory.create(username, password, name, lastname, phoneNumber);
+		
 		
 	}
+	
 	
 	private void updatePanel() {
 			

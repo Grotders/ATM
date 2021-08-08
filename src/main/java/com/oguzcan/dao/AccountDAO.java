@@ -53,12 +53,12 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 	}
 
 	@Override
-	public void delete(AccountDTO account) {
+	public void delete(int accNumber) {
 		String sql = "delete from mydb.admin where account_number=?";
 
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setLong(1, account.getAccNumber());
+			stmt.setLong(1, accNumber);
 			stmt.executeUpdate();
 			System.out.println("Kullanıcı başarıyla silindi.");
 		} catch (SQLException ex) {

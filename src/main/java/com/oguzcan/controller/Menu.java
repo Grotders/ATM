@@ -1,14 +1,15 @@
 package com.oguzcan.controller;
 
 public enum Menu {
-	ZERO(0), CREATE(1), UPDATE(2), DELETE(3), FETCH(4);
+	CREATE(1), UPDATE(2), DELETE(3), FETCH(4);
 	
-	private int no;
+	private int num;
 	
-	private Menu(int no) {
-		this.no = no;
+	private Menu(int num) {
+		this.num = num;
 	}
 	
-	final int num() { return no; }
-	
+	public int getNum() {
+		return num;
+	}
 }

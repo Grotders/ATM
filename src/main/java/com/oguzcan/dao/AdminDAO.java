@@ -51,12 +51,12 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 	}
 
 	@Override
-	public void delete(AdminDTO admin) throws NoSuchClientException{
-		String sql = "delete from mydb.admin where username=?";
-
+	public void delete(int adminId) throws NoSuchClientException{
+		String sql = "delete from mydb.admin where admin_id=?";
+		
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, admin.getUsername());
+			stmt.setInt(1, adminId);
 			stmt.executeUpdate();
 			System.out.println("Kullanıcı başarıyla silindi.");
 		} catch (SQLException ex) {

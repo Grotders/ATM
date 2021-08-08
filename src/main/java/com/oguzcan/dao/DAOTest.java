@@ -46,8 +46,8 @@ public class DAOTest {
 				String pass = input.nextString();
 				
 				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).build();
-			
-				dao.delete(adminTest);
+				int id =dao.bringId(adminTest);
+				dao.delete(id);
 				break;
 			} catch (NoSuchClientException ex) {
 				System.out.println(ex.getMessage());

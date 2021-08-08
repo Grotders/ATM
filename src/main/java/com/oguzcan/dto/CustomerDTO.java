@@ -3,10 +3,10 @@ package com.oguzcan.dto;
 import java.io.Serializable;
 import java.util.Set;
 
-public class CustomerDTO implements Serializable, Client {
+public class CustomerDTO implements Serializable, User {
 	private static final long serialVersionUID = -898475110260482733L;
 
-	private Set<AccountDTO> accountList;
+	private Set<AccountDTO> accountList;  // TreeSet
 	private String username;
 	private String password;
 	private PersonalInformationDTO info;

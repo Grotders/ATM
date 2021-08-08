@@ -16,9 +16,7 @@ public class TestClass {
 	
 
 	public void customerTest() {
-		
 		CustomerDTO custom = new CustomerDTO.Builder().username("oguzcan").password("12345").build();
-		
 		System.out.println(custom);
 		
 	}

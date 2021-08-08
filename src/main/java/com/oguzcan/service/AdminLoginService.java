@@ -6,7 +6,7 @@ import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.NoSuchClientException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 
-public class AdminLoginService implements LoginService{
+public class AdminLoginService implements LoginService<AdminDTO>{
 
 	private GenericDAO<AdminDTO> adminDao = new AdminDAO();
 	private PasswordValidatorService passwordValidator;

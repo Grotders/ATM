@@ -1,6 +1,6 @@
 package com.oguzcan.dto;
 
-public class AdminDTO implements Client{
+public class AdminDTO implements User{
 
 	private String username;
 	private String password;

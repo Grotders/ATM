@@ -11,9 +11,7 @@ public class BankView {
 	public void displayAdminPanel() {
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
-		System.out.println("2-) Kullanıcı güncelleme.");
-		System.out.println("3-) Kullanıcı sil.");
-		System.out.println("4-) Kullanıcı inceleme.");
+		System.out.println("2-) Kullanıcı inceleme.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	
@@ -31,5 +29,27 @@ public class BankView {
 		System.out.println("Oluşturulacak admin kullanıcısının bilgilerini giriniz.");
 	}
 	
+	public void displayAdminCreateCustomerPanel() {
+		System.out.println("\n\n\n\n\n\n");
+		System.out.println("Admin Panel: Customer oluşturma.\n");
+		System.out.println("Oluşturulacak müşteri kullanıcısının bilgilerini giriniz.");
+	}
+	
+	public void displayAdminFetchPanel() {
+		System.out.println("\n\n\n\n\n\n");
+		System.out.println("Admin Panel: incelemek istediğiniz kullanıcının tipini seçiniz.\n");
+		System.out.println("1-) Admin ");
+		System.out.println("2-) Müşteri ");
+		System.out.print("\nSeçiminizi giriniz: ");
+	}
+	
+	public void displayAdminFetchAdminPanel() {
+		
+	}
+	
+	public void displayAdminFetchCustomerPanel() {
+			
+		}
+
 	
 }

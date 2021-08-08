@@ -1,6 +1,10 @@
 package com.oguzcan.factory;
 
-public interface AccountFactory extends CustomerFactory{
+import com.oguzcan.dto.AccountDTO;
+import com.oguzcan.ex.WrongAccountTypeException;
 
-	
+public interface AccountFactory {
+
+	public AccountDTO create(int accNumber, double balance, String accountType)
+			throws WrongAccountTypeException;
 }
