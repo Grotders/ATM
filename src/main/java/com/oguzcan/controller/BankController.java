@@ -3,12 +3,16 @@ package com.oguzcan.controller;
 
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.dto.CustomerDTO;
+import com.oguzcan.ex.ClientAlreadyExistsException;
 import com.oguzcan.ex.NoSuchClientException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 import com.oguzcan.factory.AccountFactory;
 import com.oguzcan.factory.AdminFactory;
+import com.oguzcan.factory.AdminFactoryImpl;
 import com.oguzcan.factory.CustomerFactory;
 import com.oguzcan.service.AdminLoginService;
+import com.oguzcan.service.AdminService;
+import com.oguzcan.service.AdminServiceImpl;
 import com.oguzcan.service.LoginService;
 import com.oguzcan.view.BankView;
 
@@ -16,10 +20,10 @@ public class BankController {
 	private final BankView view = new BankView();
 	private final LoginService<AdminDTO> loginService = new AdminLoginService();
 	private final InputController input = new InputController();
-	private AdminFactory aFactory;
+	private AdminFactory aFactory = new AdminFactoryImpl();
 	private CustomerFactory cFactory;
 	private AccountFactory acFactory;
-	
+	private AdminService adminService = new AdminServiceImpl();
 	
 	// Logged in user 
 	private AdminDTO admin;
@@ -92,7 +96,6 @@ public class BankController {
 		}
 	}
 
-	
 	private void createPanel() {
 		view.displayAdminCreatePanel();
 		loop:
@@ -104,21 +107,27 @@ public class BankController {
 			}
 		}
 	}
+	
 	private void createAdminPanel() {
 		view.displayCreateAdminPanel();
-/*		System.out.print("Kullanıcı adı: ");
-		String username = input.nextString();
-		System.out.print("Şifre: ");
-		String password = input.nextString();
-*/
-// bu yapı kafa karıştırıcı mı?
+		
+//		System.out.print("Kullanıcı adı: ");
+//		String username = input.nextString();
+//		System.out.print("Şifre: ");
+//		String password = input.nextString();
+
+		// bu yapı kafa karıştırıcı mı?
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
 		
 		AdminDTO admin = aFactory.create(username, password);
-		
-//		service -> dao
+		try {
+			adminService.createAdmin(admin);
+		} catch (ClientAlreadyExistsException ex) {
+			System.out.println(ex);
+		}
 	}
+	
 	private void createCustomerPanel() {
 		view.displayCreateCustomerPanel();
 		
@@ -135,14 +144,17 @@ public class BankController {
 		
 		CustomerDTO customer = cFactory.create(username, password, name, lastname, phoneNumber);
 		
+		try {
+			adminService.createCustomer(customer);
+		} catch (ClientAlreadyExistsException ex) {
+			System.out.println(ex);
+		}
 		// controller -> view -> controller -> factory -> controller -> service -> dao
-		
 		// temel motivasyon controller methodları hariç tüm methodlar sadece bir iş yaparak SRP ye uymalılar.
 	}
 	
 	private void fetchPanel() {
 		view.displayAdminFetchPanel();
-		
 		loop:
 			while(true) {
 				switch(input.nextInt()) {

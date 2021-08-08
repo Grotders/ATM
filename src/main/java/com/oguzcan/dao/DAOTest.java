@@ -14,8 +14,8 @@ public class DAOTest {
 		DAOTest test = new DAOTest();
 		
 //		test.adminCreateTest();
-		test.adminDeleteTest();
-		
+//		test.adminDeleteTest();
+		test.xString();
 	}
 	
 	public void adminCreateTest() {
@@ -46,14 +46,21 @@ public class DAOTest {
 				String pass = input.nextString();
 				
 				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).build();
-				int id =dao.bringId(adminTest);
-				dao.delete(id);
+				dao.delete(adminTest);
 				break;
 			} catch (NoSuchClientException ex) {
 				System.out.println(ex.getMessage());
 				continue;
 			}
 		}
+	}
+	
+	void xString() {
+		String a = "BasicAccountDTO";
+		String a2 = "BusinessAccountDTO";
+		System.out.println(a.replace("AccountDTO", "").toLowerCase());
+		System.out.println(a2.replace("AccountDTO", "").toLowerCase());
+		
 	}
 }
 	

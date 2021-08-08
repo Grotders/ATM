@@ -11,8 +11,8 @@ public interface GenericDAO<T> {
 
 	// CRUD
 	void create(T t) throws ClientAlreadyExistsException;
-	void update(T t, int id);
-	void delete(int id) throws NoSuchClientException;
+	void update(T t);
+	void delete(T t) throws NoSuchClientException;
 	T retrieve(String username) throws NoSuchClientException;
 	T retrieveById(int id);
 	

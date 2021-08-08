@@ -51,7 +51,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	}
 
 	@Override
-	public void update(CustomerDTO customer, int id) {
+	public void update(CustomerDTO customer) {
 		String sql = "update mydb.customer set username=?, password=? where customer_id=?";
 		
 		try(Connection connection = dbConnection()) {
@@ -59,15 +59,15 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, customer.getUsername());
 			stmt.setString(2, customer.getPassword());
-			stmt.setInt(3, id);
+			stmt.setInt(3, customer.getCustomerId());
 			stmt.executeUpdate();
 			// Update info
-			sql = "update mydb.info set first_name=?, last_name=?, phone_number where customer_id=?";
+			sql = "update mydb.info set first_name=?, last_name=?, phone_number=? where customer_id=?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, customer.getInfo().getName());
 			stmt.setString(2, customer.getInfo().getLastname());
 			stmt.setString(3, customer.getInfo().getPhoneNumber());
-			stmt.setInt(4, id);
+			stmt.setInt(4, customer.getCustomerId());
 			stmt.executeUpdate();
 			
 			System.out.println("Güncelleme başarılı.");
@@ -79,28 +79,28 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	}
 
 	@Override
-	public void delete(int customerId) throws NoSuchClientException{
+	public void delete(CustomerDTO customer) throws NoSuchClientException{
 		String sql = "delete from mydb.info where customer_id=?";
 				
 		try (Connection connection = dbConnection()) {
 			// DELETE info table
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, customerId);
+			stmt.setInt(1, customer.getCustomerId());
 			stmt.executeUpdate();
 			// DELETE transaction history table
 			sql = "delete from mydb.transaction_history where customer_id=?";
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, customerId);
+			stmt.setInt(1, customer.getCustomerId());
 			stmt.executeUpdate();
 			// DELETE account table
 			sql = "delete from mydb.account where customer_id=?";			
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, customerId);
+			stmt.setInt(1, customer.getCustomerId());
 			stmt.executeUpdate();
 			// DELETE customer table
 			sql = "delete from mydb.customer where customer_id=?";
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, customerId);
+			stmt.setInt(1, customer.getCustomerId());
 			stmt.executeUpdate();
 			
 			System.out.println("Kullanıcı başarıyla silindi.");
@@ -119,7 +119,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, Integer.parseInt(input));
+			stmt.setInt(0, Integer.parseInt(input));
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {

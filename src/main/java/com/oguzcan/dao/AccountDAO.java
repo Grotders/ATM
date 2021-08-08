@@ -24,7 +24,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setDouble(1, account.getBalance());
-			stmt.setString(2, account.getClass().getSimpleName());
+			stmt.setString(2, account.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
 			stmt.executeUpdate();
 			System.out.println("Kullanıcı başarıyla oluşturuldu.");
 		} catch (MySQLIntegrityConstraintViolationException ex) {
@@ -35,14 +35,14 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 	}
 
 	@Override
-	public void update(AccountDTO account, int id) {
+	public void update(AccountDTO account) {
 		String sql = "update mydb.account set username=?, password=? where account_number=?";
 		
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setDouble(1, account.getBalance());
 			stmt.setString(2, account.getClass().getSimpleName());
-			stmt.setInt(0, id);
+			stmt.setInt(0, account.getAccNumber());
 			stmt.executeUpdate();
 			System.out.println("Güncelleme başarılı.");
 		} catch(SQLException ex) {
@@ -53,12 +53,12 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 	}
 
 	@Override
-	public void delete(int accNumber) {
+	public void delete(AccountDTO account) {
 		String sql = "delete from mydb.admin where account_number=?";
 
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setLong(1, accNumber);
+			stmt.setLong(1, account.getAccNumber());
 			stmt.executeUpdate();
 			System.out.println("Kullanıcı başarıyla silindi.");
 		} catch (SQLException ex) {
@@ -78,10 +78,10 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				if(rs.getString("account_type").equals("BasicAccountDTO")) {
+				if(rs.getString("account_type").equals("basic")) {
 					accountDto = new BasicAccountDTO.Builder()
 							.accNumber(rs.getInt("username")).balance(rs.getDouble("balance")).build();
-				} else if(rs.getString("account_type").equals("BusinessAccountDTO")) {
+				} else if(rs.getString("account_type").equals("business")) {
 					accountDto = new BusinessAccountDTO.Builder()
 							.accNumber(rs.getInt("username")).balance(rs.getDouble("balance")).build();
 				}
@@ -106,10 +106,10 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				if(rs.getString("account_type").equals("BasicAccountDTO")) {
+				if(rs.getString("account_type").equals("basic")) {
 					accountDto = new BasicAccountDTO.Builder()
 							.accNumber(rs.getInt("username")).balance(rs.getDouble("balance")).build();
-				} else if(rs.getString("account_type").equals("BusinessAccountDTO")) {
+				} else if(rs.getString("account_type").equals("business")) {
 					accountDto = new BusinessAccountDTO.Builder()
 							.accNumber(rs.getInt("username")).balance(rs.getDouble("balance")).build();
 				}

@@ -10,7 +10,7 @@ public abstract class AccountDTO implements Serializable{
 	
 	
 //	######################  GETTER & SETTER ################################
-	public long getAccNumber() {
+	public int getAccNumber() {
 		return accNumber;
 	}
 	public void setAccNumber(int accNumber) {

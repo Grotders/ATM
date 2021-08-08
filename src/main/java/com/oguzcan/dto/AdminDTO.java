@@ -4,12 +4,13 @@ public class AdminDTO implements User{
 
 	private String username;
 	private String password;
-	private boolean loggedIn;
+	private int adminId;
+	
 	
 	public AdminDTO(Builder builder) {
 		this.username = builder.username;
 		this.password = builder.password;
-		this.loggedIn = false;
+		this.adminId = builder.adminId;
 	}
 	
 	public AdminDTO() {
@@ -20,6 +21,7 @@ public class AdminDTO implements User{
 	public static class Builder {
 		private String username;
 		private String password;
+		private int adminId = 0;
 		
 		public Builder username(String username) {
 			this.username = username;
@@ -27,6 +29,10 @@ public class AdminDTO implements User{
 		}
 		public Builder password(String password) {
 			this.password = password;
+			return this;
+		}
+		public Builder adminId(int adminId) {
+			this.adminId = adminId;
 			return this;
 		}
 		public AdminDTO build() {
@@ -47,9 +53,17 @@ public class AdminDTO implements User{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public int getAdminId() {
+		return adminId;
+	}
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
+	}
 
 	@Override
 	public String toString() {
-		return "AdminDTO [username=" + username + ", password=" + password + "]";
+		return "AdminDTO [id=" + adminId + ", username=" + username + ", password=" + password + "]";
 	}
+
+	
 }
