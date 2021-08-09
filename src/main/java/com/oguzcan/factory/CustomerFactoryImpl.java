@@ -1,7 +1,7 @@
 package com.oguzcan.factory;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.CustomerDTO;
@@ -18,8 +18,8 @@ public class CustomerFactoryImpl implements CustomerFactory{
 		PersonalInformationDTO info = new PersonalInformationDTO.Builder()
 				.name(name).lastname(lastname).phoneNumber(phoneNumber).build();
 		
-		Set<AccountDTO> aList = new TreeSet<AccountDTO>();
-		AccountDTO account = aFactory.create(0, 0, "basic");
+		Set<AccountDTO> aList = new HashSet<AccountDTO>();
+		AccountDTO account = aFactory.create(0, 0.0, "basic");
 		aList.add(account);
 		
 		CustomerDTO customer = new CustomerDTO.Builder()

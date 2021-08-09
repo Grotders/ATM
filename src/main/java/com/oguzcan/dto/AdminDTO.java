@@ -62,7 +62,7 @@ public class AdminDTO implements User{
 
 	@Override
 	public String toString() {
-		return "AdminDTO [id=" + adminId + ", username=" + username + ", password=" + password + "]";
+		return  adminId + " " + username + " " + password;
 	}
 
 	

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.oguzcan.dto.AdminDTO;
@@ -107,5 +109,25 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			System.out.println(ex);
 		}
 		return adminDto;
+	}
+	
+	public Set<AdminDTO> retrieveAll() {
+		String sql = "select * from mydb.admin";
+		Set<AdminDTO> list = new HashSet<AdminDTO>();
+		
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				adminDto = new AdminDTO.Builder()
+						.username(rs.getString("username")).password(rs.getString("password"))
+						.adminId(rs.getInt("admin_id")).build();
+				list.add(adminDto);
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex);
+		}
+		return list;
 	}
 }

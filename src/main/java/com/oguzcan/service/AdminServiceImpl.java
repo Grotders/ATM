@@ -1,5 +1,8 @@
 package com.oguzcan.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.oguzcan.dao.AccountDAO;
 import com.oguzcan.dao.AdminDAO;
 import com.oguzcan.dao.CustomerDAO;
@@ -16,7 +19,7 @@ public class AdminServiceImpl extends AbstractService implements AdminService<Ge
 	
 	
 	@Override
-	public void create(GenericDAO input) {
+	public void create(GenericDAO t) {
 		// yok tıkandım
 	}
 
@@ -40,5 +43,15 @@ public class AdminServiceImpl extends AbstractService implements AdminService<Ge
 	public void createAccount(AccountDTO account) throws ClientAlreadyExistsException {
 		dao = new AccountDAO();
 		dao.create(account);
+	}
+	
+	@Override
+	public Set<AdminDTO> fetchAdminList() {
+		Set<AdminDTO> list = new HashSet<AdminDTO>();
+		dao = new AdminDAO();
+		AdminDAO dao2 = (AdminDAO) dao;
+		list = dao2.retrieveAll();
+		
+		return list;
 	}
 }

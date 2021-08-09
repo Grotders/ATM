@@ -16,6 +16,7 @@ public class BankView {
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
 		System.out.println("2-) Kullanıcı incele.");
+		System.out.println("3-) Çıkış yap.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 
@@ -26,6 +27,7 @@ public class BankView {
 		System.out.println("PlaceHolder");
 		System.out.println("1-) Admin oluştur.");
 		System.out.println("2-) Müşteri oluştur.");
+		System.out.println("3-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 1-1
@@ -56,7 +58,9 @@ public class BankView {
 		System.out.println("Admin Panel: Admin incele.\n");
 		
 		System.out.println("Sisteme kayıtlı adminlerin listesi:");
-		System.out.println("Admin List placeholder!");
+		for(AdminDTO temp: adminList) 
+			System.out.println(temp);
+		System.out.println();
 
 		System.out.print("Incelemek istediğiniz adminin id'sini giriniz: ");
 	}
@@ -68,6 +72,7 @@ public class BankView {
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
 		System.out.println("2-) Kullanıcıyı sil.");
+		System.out.println("3-) Geri.");
 	}
 	// 2-1-1-1
 	public void displayAdminUpdatePanel() {
