@@ -9,7 +9,7 @@ import com.oguzcan.ex.WrongClientCredentialsException;
 public class AdminLoginService implements LoginService<AdminDTO>{
 
 	private GenericDAO<AdminDTO> adminDao = new AdminDAO();
-	private PasswordValidatorService passwordValidator;
+
 	
 	@Override
 	public AdminDTO login(String username, String password) 

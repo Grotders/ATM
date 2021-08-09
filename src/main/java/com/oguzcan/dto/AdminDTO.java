@@ -1,6 +1,6 @@
 package com.oguzcan.dto;
 
-public class AdminDTO implements User{
+public class AdminDTO implements User, Comparable<Object>{
 
 	private String username;
 	private String password;
@@ -61,9 +61,19 @@ public class AdminDTO implements User{
 	}
 
 	@Override
+	public int compareTo(Object o) {
+		AdminDTO admin = (AdminDTO) o;
+		
+		if(adminId == admin.getAdminId()) {
+			return 0;
+		}
+		
+		return adminId > admin.getAdminId() ? 1 : -1;
+	}
+	
+	
+	@Override
 	public String toString() {
 		return  adminId + " " + username + " " + password;
 	}
-
-	
 }

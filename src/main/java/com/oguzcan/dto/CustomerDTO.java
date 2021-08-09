@@ -3,7 +3,7 @@ package com.oguzcan.dto;
 import java.io.Serializable;
 import java.util.Set;
 
-public class CustomerDTO implements Serializable, User {
+public class CustomerDTO implements Serializable, User, Comparable<Object>{
 	private static final long serialVersionUID = -898475110260482733L;
 
 	private Set<AccountDTO> accountList;  // TreeSet
@@ -86,6 +86,18 @@ public class CustomerDTO implements Serializable, User {
 	}
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
+	}
+	
+	
+	@Override
+	public int compareTo(Object o) {
+		CustomerDTO customer = (CustomerDTO) o;
+		
+		if(customerId == customer.getCustomerId()) {
+			return 0;
+		}
+		
+		return customerId > customer.getCustomerId() ? 1 : -1;
 	}
 	
 	@Override

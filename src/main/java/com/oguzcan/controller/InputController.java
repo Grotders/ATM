@@ -3,28 +3,33 @@ package com.oguzcan.controller;
 import java.util.Scanner;
 
 public class InputController {
+	Scanner keyboard = new Scanner(System.in); 	// String
+	Scanner keyboard2 = new Scanner(System.in); // int
 	
 	// keyboard.close() ekleyince çöküyor kod.
 	public String nextString() {
 		
-		Scanner keyboard = new Scanner(System.in);
 		String input = keyboard.nextLine();
-		
 		return input;
 	}
 	public String nextString(String text) {
 		System.out.print(text);
-		Scanner keyboard = new Scanner(System.in);
-		String input = keyboard.nextLine();
 		
+		String input = keyboard.nextLine();
 		return input;
 	}
 	
-	// keyboard.close() ekleyince çöküyor kod.
+//  ################################### INT ####################################
 	public int nextInt() {
-		Scanner keyboard = new Scanner(System.in);
-		int input = keyboard.nextInt();
 		
+		int input = keyboard2.nextInt();
+		return input;
+	}
+	
+	public int nextInt(String text) {
+		System.out.print(text);
+		
+		int input = keyboard2.nextInt();
 		return input;
 	}
 }

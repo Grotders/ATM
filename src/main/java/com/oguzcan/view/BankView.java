@@ -13,6 +13,7 @@ public class BankView {
 	}
 	
 	public void displayAdminPanel() {
+		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
 		System.out.println("2-) Kullanıcı incele.");
@@ -24,7 +25,7 @@ public class BankView {
 	public void displayAdminCreatePanel() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Kullanıcı oluştur.\n");
-		System.out.println("PlaceHolder");
+		
 		System.out.println("1-) Admin oluştur.");
 		System.out.println("2-) Müşteri oluştur.");
 		System.out.println("3-) Geri.");
@@ -50,6 +51,7 @@ public class BankView {
 		System.out.println("İncelemek istediğiniz kullanıcının tipini seçiniz: ");
 		System.out.println("1-) Admin ");
 		System.out.println("2-) Müşteri ");
+		System.out.println("3-) Geri");		
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1
@@ -65,9 +67,10 @@ public class BankView {
 		System.out.print("Incelemek istediğiniz adminin id'sini giriniz: ");
 	}
 	// 2-1-1
-	public void displayFetchedAdminPanel(int id, String username) {
+	public void displayFetchedAdminPanel(AdminDTO fetchedAdmin) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: Id=" + id + " username=" + username +"\n");
+		System.out.println("Admin Panel: Admin Id=" + fetchedAdmin.getAdminId() 
+							   + " Username=" + fetchedAdmin.getUsername() +"\n");
 		
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
@@ -78,6 +81,7 @@ public class BankView {
 	public void displayAdminUpdatePanel() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin güncelle.\n");
+		System.out.println("Güncellemek istediğiniz bilgileri giriniz. Boş bıraktığınız bilgiler değişmeyecektir:");
 	}
 	// 2-1-1-2
 	public void displayAdminDeletePanel(int id, String username) {

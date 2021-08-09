@@ -10,14 +10,14 @@ public class AccountFactoryImpl implements AccountFactory{
 	// BusinessAccountDTO
 	@Override
 	public AccountDTO create(int accNumber, double balance, String accountType){
-		AccountDTO account;
 		
 		if(accountType.equals("business")) {
-			return account = new BusinessAccountDTO.Builder()
+			return new BusinessAccountDTO.Builder()
 					.accNumber(accNumber).balance(balance).build();
 		}
 		
-		return account = new BasicAccountDTO.Builder()
+		// basic account
+		return new BasicAccountDTO.Builder()
 					.accNumber(accNumber).balance(balance).build();
 	}
 }

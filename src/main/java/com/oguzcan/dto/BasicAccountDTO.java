@@ -31,4 +31,15 @@ public class BasicAccountDTO extends AccountDTO implements Serializable{
 			return new BasicAccountDTO(this);
 		}
 	}
+
+	@Override
+	public int compareTo(Object o) {
+		BasicAccountDTO account = (BasicAccountDTO) o;
+		
+		if(this.getAccNumber() == account.getAccNumber()) {
+			return 0;
+		}
+		
+		return this.getAccNumber() > account.getAccNumber() ? 1 : -1;
+	}
 }

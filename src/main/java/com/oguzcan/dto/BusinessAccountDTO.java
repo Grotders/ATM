@@ -30,4 +30,15 @@ public class BusinessAccountDTO extends AccountDTO implements Serializable{
 			return new BusinessAccountDTO(this);
 		}
 	}
+
+	@Override
+	public int compareTo(Object o) {
+		BusinessAccountDTO account = (BusinessAccountDTO) o;
+		
+		if(this.getAccNumber() == account.getAccNumber()) {
+			return 0;
+		}
+		
+		return this.getAccNumber() > account.getAccNumber() ? 1 : -1;
+	}
 }

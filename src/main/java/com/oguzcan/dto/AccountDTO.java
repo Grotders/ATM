@@ -2,7 +2,7 @@ package com.oguzcan.dto;
 
 import java.io.Serializable;
 
-public abstract class AccountDTO implements Serializable{
+public abstract class AccountDTO implements Serializable, Comparable<Object>{
 	private static final long serialVersionUID = -1695262772023643158L;
 
 	private int accNumber;

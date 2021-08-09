@@ -1,12 +1,8 @@
 package com.oguzcan.controller;
 
 
-import static com.oguzcan.controller.Menu.CREATE;
-import static com.oguzcan.controller.Menu.DELETE;
-
 import java.util.Set;
 
-import com.oguzcan.dao.GenericDAO;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.dto.CustomerDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
@@ -26,39 +22,43 @@ import com.oguzcan.view.BankView;
 
 public class BankController {
 	private final BankView view = new BankView();
+
 	private final LoginService<AdminDTO> loginService = new AdminLoginService();
 	private final InputController input = new InputController();
-	private GenericDAO factory;
 	private AdminFactory aFactory = new AdminFactoryImpl();
 	private CustomerFactory cFactory = new CustomerFactoryImpl();
 	private AccountFactory acFactory = new AccountFactoryImpl();
 	
 	private AdminService adminService = new AdminServiceImpl();
-	
-	// Logged in user 
-	private AdminDTO admin;
 
+	// Logged in user 
+	private AdminDTO loggedInAdmin;
+
+	// RUN-TIME Constant Pool
+	private final int CREATE = 1;
+	private final int FETCH = 2;
+	private final int ADMIN = 1;
+	private final int CUSTOMER = 2;
+	private final int BACK = 3;
+	private final int UPDATE = 1;
+	private final int DELETE = 2;
+	
 	
 	public void init() {
 		while(true) {
 			view.displayWelcome();
 			login();
-			
 		}
 	}
-
+//  0
 	private void login() {
 		try {
-/* 
-			System.out.print("kullanıcı adı: ");
-			String username = input.nextString();
-			System.out.print("sifre: ");
-			String password = input.nextString();
-			loginService.login(username, password);
- */			
-			admin = loginService.login("oguzcan", "12345");
+/* 			String username = input.nextString("Kullanıcı adı: ");
+			String password = input.nextString("Şifre: ");
+ 			loginService.login(username, password);
+*/			
+			loggedInAdmin = loginService.login("oguzcan", "12345");
 
-			
 			System.out.println("Giriş başarılı! Yönlendiriliyorsunuz ...");
 		} catch (WrongClientCredentialsException ex) {
 			System.out.println(ex.getMessage());
@@ -69,7 +69,6 @@ public class BankController {
 		
 		redirecting();
 		adminPanel();
-		
 	}
 	
 	private void redirecting() {
@@ -80,85 +79,63 @@ public class BankController {
 			System.out.println("Thread interrupted");
 		}
 	}
-	
+
 	private void adminPanel() {
+		top:
+		while(true) {
 		view.displayAdminPanel();
-		System.out.println(CREATE);
-		System.out.println();
-		System.out.println(CREATE.ordinal()); // çalışıyor
-		System.out.println(DELETE.getNum()); // çalışıyor
-		loop:
-		while(true) {
-			switch(input.nextInt()) {
-				case 1: createPanel(); break loop;	// Enum yapısı eklenecek
-				case 2: fetchPanel(); break loop;
-				case 3: logout(); break loop;
-
-//				case CREATE: fetchPanel(); break loop;	 				// cannot convert from enum to int
-//				case CREATE.ordinal(): createPanel(); break loop;		// must be constant
-//				case FETCH.getNum(): fetchPanel(); break loop; 			// must be constant
-
-				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
+		
+			loop:
+			while(true) {
+				switch(input.nextInt()) {
+					case CREATE: createPanel(); break loop;	// Enum yapısı eklenecek
+					case FETCH: fetchPanel(); break loop;
+					case BACK: logout(); break top;
+					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
+				}		
 			}
-/*		
-			switch(input.nextInt()) {				// java 14 özelliği eklenmiyor java 8'e
-			case CREATE -> createPanel(); 	
-			case UPDATE -> updatePanel(); 
-			case DELETE -> deletePanel(); 
-			case FETCH -> fetchPanel(); 
-			default -> System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
-		}
-*/
 		}
 	}
 
-// ############################ CREATE ##########################################
+//1 ############################ CREATE ########################################
 	private void createPanel() {
-		view.displayAdminCreatePanel();
-		loop:
+		top:
 		while(true) {
-			switch(input.nextInt()) {
-				case 1: createAdminPanel(); break loop;
-				case 2: createCustomerPanel(); break loop;
-				case 3: break loop;
-				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
+			view.displayAdminCreatePanel();
+			while(true) {
+				switch(input.nextInt()) {
+					case ADMIN: createAdminPanel(); break top;
+					case CUSTOMER: createCustomerPanel(); break top;
+					case BACK: break top;
+					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
+				}
 			}
 		}
 	}
-	
+//  1-1
 	private void createAdminPanel() {
 		view.displayCreateAdminPanel();
 		
-//		System.out.print("Kullanıcı adı: ");
-//		String username = input.nextString();
-//		System.out.print("Şifre: ");
-//		String password = input.nextString();
-
-		// bu yapı kafa karıştırıcı mı?
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
 		
 		AdminDTO admin = aFactory.create(username, password);
 		try {
 			adminService.createAdmin(admin);
+			
 		} catch (ClientAlreadyExistsException ex) {
 			System.out.println(ex);
 		}
 	}
-	
+//  1-2
 	private void createCustomerPanel() {
 		view.displayCreateCustomerPanel();
 		
-		System.out.print("Kullanıcı adı: ");
-		String username = input.nextString();
-		System.out.print("Şifre: ");
-		String password = input.nextString();
-		System.out.print("Müşteri adı: ");
-		String name = input.nextString();
-		System.out.print("Müşteri soyadı: ");
-		String lastname = input.nextString();
-		System.out.print("Müşteri telefon numarası: ");
-		String phoneNumber = input.nextString();
+		String username = input.nextString("Kullanıcı adı: ");
+		String password = input.nextString("Şifre: ");
+		String name = input.nextString("Müşteri adı: ");
+		String lastname = input.nextString("Müşteri soyadı: ");
+		String phoneNumber = input.nextString("Müşteri telefon numarası: ");
 		
 		CustomerDTO customer = cFactory.create(username, password, name, lastname, phoneNumber);
 		
@@ -167,58 +144,79 @@ public class BankController {
 		} catch (ClientAlreadyExistsException ex) {
 			System.out.println(ex);
 		}
-		// controller -> view -> controller -> factory -> controller -> service -> dao
-		// temel motivasyon controller methodları hariç tüm methodlar sadece bir iş yaparak SRP ye uymalılar.
 	}
 
-// ############################## FETCH ########################################
+//2 ################################## FETCH ###################################
 	private void fetchPanel() {
 		view.displayAdminFetchPanel();
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-					case 1: fetchAdminPanel(); break loop;
-					case 2: fetchCustomerPanel(); break loop;
+					case ADMIN: fetchAdminPanel(); break loop;
+					case FETCH: fetchCustomerPanel(); break loop;
+					case BACK: break loop;
 					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
 	}
-	// geri gitme problemli
+
+//  2-1
 	private void fetchAdminPanel() {
-		Set<AdminDTO> list = adminService.fetchAdminList();
-		view.displayAdminListPanel(list);
-		AdminDTO admin;
+		Set<AdminDTO> adminList = adminService.fetchAdminList();
+		view.displayAdminListPanel(adminList);
+		AdminDTO fetchedAdmin;
 		loop: 
 			while(true) {
-				int id = input.nextInt();
-				for(AdminDTO temp:list) {
-					if(temp.getAdminId() == id) {
-						admin = temp;
+				int adminId = input.nextInt();
+				for(AdminDTO temp:adminList) {
+					if(temp.getAdminId() == adminId) {
+						fetchedAdmin = temp;
 						break loop;
 					} 
 				}
+				System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
 			}
-		fetchAdminMenuPanel();
+		fetchAdminMenuPanel(fetchedAdmin);
 	}
-	private void fetchAdminMenuPanel() {
-		view.displayFetchedAdminPanel(admin.getAdminId(), admin.getUsername());
+	
+//  2-1-1
+	private void fetchAdminMenuPanel(AdminDTO fetchedAdmin) {
+		view.displayFetchedAdminPanel(fetchedAdmin);
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case 1: fetchAdminPanel(); break loop;
-				case 2: fetchCustomerPanel(); break loop;
-				case 3: break loop;
+				case UPDATE: updateAdmin(fetchedAdmin); break loop;
+				case DELETE: deleteAdmin(fetchedAdmin); break loop;
+				case BACK: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
+	}
+//  2-1-2
+	private void updateAdmin(AdminDTO fetchedAdmin) {
+		AdminDTO updatedAdmin = aFactory.copy(fetchedAdmin);
+		view.displayAdminUpdatePanel();
+		loop:
+		while(true) {
+			String username = input.nextString("Kullanıcı adı: ");
+			String password = input.nextString("Şifre: ");
+			
+			if(username == "" && password == "") {
+				System.out.println("İşleminiz iptal edilmiştir."); break loop;
+			} else if (username != "") {
+				updatedAdmin.setPassword(password);
+			} else if(password == "") {
+				updatedAdmin.setUsername(username);
+			} else {
+				updatedAdmin.setUsername(username);
+				updatedAdmin.setPassword(password);
+			}
+			
+		}
 		
 	}
 	
-	private void updateAdmin() {
-		view.displayAdminUpdatePanel();
-	}
-	
-	private void deleteAdmin() {
+	private void deleteAdmin(AdminDTO fetchedAdmin) {
 		
 	}
 	
@@ -234,6 +232,6 @@ public class BankController {
 	
 	
 	private void logout() {
-		admin = null;
+		loggedInAdmin = null;
 	}
 }
