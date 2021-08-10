@@ -3,7 +3,6 @@ package com.oguzcan.dao;
 import com.oguzcan.controller.InputController;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
-import com.oguzcan.ex.NoSuchClientException;
 
 public class DAOTest {
 	InputController input = new InputController();
@@ -48,7 +47,7 @@ public class DAOTest {
 				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).build();
 				dao.delete(adminTest);
 				break;
-			} catch (NoSuchClientException ex) {
+			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
 				continue;
 			}

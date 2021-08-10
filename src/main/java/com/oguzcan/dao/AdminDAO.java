@@ -30,7 +30,8 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
 		} catch (SQLException ex) {
-			System.out.println("AdminDAO create sqlException.");
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 	}
 
@@ -53,7 +54,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 	}
 
 	@Override
-	public void delete(AdminDTO admin) throws NoSuchClientException{
+	public void delete(AdminDTO admin) {
 		String sql = "delete from mydb.admin where admin_id=?";
 		
 		try (Connection connection = dbConnection()) {
@@ -87,6 +88,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 		return adminDto;
 	}
@@ -107,10 +109,12 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 		return adminDto;
 	}
 	
+
 	public Set<AdminDTO> retrieveAll() {
 		String sql = "select * from mydb.admin";
 		Set<AdminDTO> list = new TreeSet<AdminDTO>();
@@ -127,6 +131,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 		return list;
 	}

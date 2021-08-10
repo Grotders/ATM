@@ -102,7 +102,6 @@ public class CustomerDTO implements Serializable, User, Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return "Customer [id=" + customerId + ", accountList=" + accountList + ", username=" 
-							+ username + ", password=" + password + ", info=" + info + "]";
+		return  customerId + " " + info.getName() + " " + info.getLastname();
 	}
 }

@@ -32,4 +32,13 @@ public class InputController {
 		int input = keyboard2.nextInt();
 		return input;
 	}
+	
+//  ################################# DOUBLE ##################################
+	public double nextDouble() {
+		double input = keyboard2.nextDouble();
+		return input;
+	}
+	
+	
+	
 }

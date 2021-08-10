@@ -14,9 +14,9 @@ public class AdminFactoryImpl implements AdminFactory{
 
 	@Override
 	public AdminDTO copy(AdminDTO admin) {
-		AdminDTO admin2 = new AdminDTO.Builder()
+		AdminDTO copyAdmin = new AdminDTO.Builder()
 				.username(admin.getUsername()).password(admin.getPassword()).build();
-		return admin2;
+		return copyAdmin;
 	}
 
 }

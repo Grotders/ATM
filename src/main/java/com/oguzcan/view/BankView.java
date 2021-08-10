@@ -2,7 +2,10 @@ package com.oguzcan.view;
 
 import java.util.Set;
 
+import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.AdminDTO;
+import com.oguzcan.dto.CustomerDTO;
+import com.oguzcan.dto.TransactionHistoryDTO;
 
 public class BankView {
 
@@ -76,6 +79,7 @@ public class BankView {
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
 		System.out.println("2-) Kullanıcıyı sil.");
 		System.out.println("3-) Geri.");
+		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-1-1
 	public void displayAdminUpdatePanel() {
@@ -84,99 +88,122 @@ public class BankView {
 		System.out.println("Güncellemek istediğiniz bilgileri giriniz. Boş bıraktığınız bilgiler değişmeyecektir:");
 	}
 	// 2-1-1-2
-	public void displayAdminDeletePanel(int id, String username) {
+	public void displayAdminDeletePanel(AdminDTO fetchedAdmin) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin sil.\n");
-		System.out.println("Id=" + id + " " + "username="+ username +" kullanıcı silinecek. Devam etmek için (Y/y) giriniz.");
+		System.out.println( fetchedAdmin +" kullanıcı silinecek.");
+		System.out.print("\nDevam etmek için (Y/y) giriniz:");
 	}
 	// 2-2
-	public void displayCustomerListPanel() {
+	public void displayCustomerListPanel(Set<CustomerDTO> customerList) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri incele.\n");
 		
 		System.out.println("Sisteme kayıtlı müşterilerin listesi:");
-		System.out.println("Müşteri List placeholder!");
+		for(CustomerDTO temp: customerList) 
+			System.out.println(temp);
+		System.out.println();
 		
 		System.out.print("Incelemek istediğiniz müşterinin id'sini giriniz: ");
 	}
 	//2-1-1 	#### CUSTOMER ####
-	public void displayFetchedCustomerPanel(int id, String name, String lastname) {
+	public void displayFetchedCustomerPanel(CustomerDTO fetchedCustomer) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: Id=" + id + " " + name + " " + "lastname" + "\n");
+		System.out.println("Admin Panel: " + fetchedCustomer.getCustomerId() + " " + fetchedCustomer.getInfo().getName() 
+										+ " " + fetchedCustomer.getInfo().getLastname() + "\n");
 		
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
-		System.out.println("2-) Kullanıcıya hesap oluştur. (Basic, Business)");
-		System.out.println("3-) Kullanıcı hesaplarını incele.");
-		System.out.println("4-) Kullanıcı işlem geçmişini göster.");
-		System.out.println("5-) Kullanıcıyı sil.");
+		System.out.println("2-) Kullanıcıyı sil.");
+		System.out.println("3-) Kullanıcıya hesap oluştur. (Basic, Business)");
+		System.out.println("4-) Kullanıcı hesaplarını incele.");
+		System.out.println("5-) Geri.");
+		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	
 	// 2-1-1-1
 	public void displayCustomerUpdatePanel() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri güncelle.\n");
+		System.out.println("Güncellemek istediğiniz bilgileri giriniz. Boş bıraktığınız bilgiler değişmeyecektir:");
+
 	}
-	// 2-1-2-2
+	
+	// 2-1-1-2
+		public void displayCustomerDeletePanel(CustomerDTO fetchedCustomer) {
+			System.out.println("\n\n\n\n\n\n");
+			System.out.println("Admin Panel: Müşteri sil.\n");
+			System.out.println(fetchedCustomer + " kullanıcı silinecek.");
+			System.out.print("\nDevam etmek için (Y/y) giriniz:");
+		}
+	// 2-1-2-3
 	public void displayCreateAccountPanel() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Hesap oluştur.\n");
 		System.out.println("Oluşturulacak müşteri hesabının bilgilerini giriniz.");
+		System.out.println("Oluşturulacak hesabın tipini belirleyiniz:\n");
+		System.out.println("1-) Standart Hesap.");
+		System.out.println("2-) Ticari Hesap.");
+		System.out.print("\nSeçiminizi giriniz: ");
 	}
-	// 2-1-2-3 		
-	public void displayAccountListPanel() {
+	// 2-1-2-4 		
+	public void displayAccountListPanel(Set<AccountDTO> accountList) throws NullPointerException {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Hesap incele.\n");
 		
 		System.out.println("Sisteme kayıtlı müşterinin hesaplarının listesi:");
-		System.out.println("Account List placeholder!");
-
+		
+		for(AccountDTO temp: accountList) 
+			System.out.println(temp);
+		System.out.println();
 		System.out.print("Incelemek istediğiniz hesap numarasını giriniz: ");
+		
 	}
 	// 2-1-2-3-1 	#### ACCOUNT ####
-	public void displayFetchedAccountPanel(int accountNo, double balance, String accountType) {
+	public void displayFetchedAccountPanel(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: " + accountNo + " " + balance + " " + accountType + "\n");
+		System.out.println(fetchedAccount.getAccNumber() + " " +
+				fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase()
+				+ "bakiye: " + fetchedAccount.getBalance());
 		
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Hesabın bakiyesini değiştir.");
-		System.out.println("2-) Hesap tipini değiştir. (Basic->Business, Business->Basic)");
-		System.out.println("3-) Hesabı sil");
+		System.out.println("2-) Hesabı sil");
+		System.out.println("3-) Hesap tipini değiştir. (Basic->Business, Business->Basic)");
+		System.out.println("4-) Geri.");
+		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-2-3-1-1
-	public void displayAccountBalanceUpdatePanel(double balance) {
+	public void displayAccountBalanceUpdatePanel(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Bakiye güncelle.\n");
-		System.out.println("Mevcut bakiye: " + balance);
+		System.out.println("Mevcut bakiye: " + fetchedAccount.getBalance());
 		System.out.println("Bakiye giriniz (min 0):");
 	}
 	// 2-1-2-3-1-2
-	public void displayAccountTypeChangePanel(String accounType) {
+	public void displayAccountDeletePanel(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: Tip değiştir.\n");
-		System.out.println("Mevcut hesabınızın tipi: " + accounType);
-		System.out.println("Hesap tipi değişecek, devam etmek için (Y/y) giriniz. (Basic->Business, Business->Basic)");
+		System.out.println("Admin Panel: Müşteri sil.\n");
+		System.out.println( fetchedAccount +" hesap silinecek.");
+		System.out.print("\nDevam etmek için (Y/y) giriniz:");
 	}
 	// 2-1-2-3-1-3
-	public void displayAccountDeletePanel(int id, String name, String lastname) {
+	public void displayAccountTypeChangePanel(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: Müşteri sil.\n");
-		System.out.println("Id=" + id + " " + name + " " + lastname + " kullanıcı silinecek. Devam etmek için (Y/y) giriniz.");
+		System.out.println("Admin Panel: Tip değiştir.\n");
+		System.out.println("Mevcut hesabınızın tipi: " 
+				+ fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
+		System.out.println("Hesap tipi değişecek, devam etmek için (Y/y) giriniz. (Basic->Business, Business->Basic)");
 	}
-	
 	// 2-1-2-4
-	public void displayTransactionHistoryPanel() {
+	public void displayTransactionHistoryPanel(Set<TransactionHistoryDTO> history) {
 		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: İşlem geçmişi.");
-		System.out.println("Kullanıcının işlem geçmişi asağıda görüntülenmektedir.");
-		System.out.println("Transaction history place holder");
+		System.out.println("Admin Panel: Hesap İşlem geçmişi.");
+		System.out.println("Hesabın işlem geçmişi asağıda görüntülenmektedir.");
+		for(TransactionHistoryDTO temp: history) 
+			System.out.println(temp);
 		System.out.println("Devam etmek için herhangi bir tuşa basınız.");
 	}
-	// 2-1-2-5
-	public void displayCustomerDeletePanel(int id, String name, String lastname) {
-		System.out.println("\n\n\n\n\n\n");
-		System.out.println("Admin Panel: Müşteri sil.\n");
-		System.out.println("Id=" + id + " " + name + " " + lastname + " kullanıcı silinecek. Devam etmek için (Y/y) giriniz.");
-	}
+	
 	
 }

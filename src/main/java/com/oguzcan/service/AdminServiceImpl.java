@@ -9,10 +9,11 @@ import com.oguzcan.dao.CustomerDAO;
 import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.dto.CustomerDTO;
+import com.oguzcan.dto.TransactionHistoryDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
 
 
-public class AdminServiceImpl<T> extends AbstractService implements AdminService{
+public class AdminServiceImpl extends AbstractService implements AdminService{
 
 	
 	AccountDAO accountDao = new AccountDAO();
@@ -31,7 +32,7 @@ public class AdminServiceImpl<T> extends AbstractService implements AdminService
 		customerDao.create(customer);
 	}
 	@Override
-	public void createAccount(AccountDTO account) throws ClientAlreadyExistsException {
+	public void createAccount(AccountDTO account) {
 		accountDao.create(account);
 	}
 
@@ -40,18 +41,52 @@ public class AdminServiceImpl<T> extends AbstractService implements AdminService
 	public Set<AdminDTO> fetchAdminList() {
 		Set<AdminDTO> list = new TreeSet<AdminDTO>();
 
-		AdminDAO dao2 = adminDao;
-		list = dao2.retrieveAll();
+
+		list = adminDao.retrieveAll();
+		
+		return list;
+	}
+	@Override
+	public Set<CustomerDTO> fetchCustomerList() {
+		Set<CustomerDTO> list = new TreeSet<CustomerDTO>();
+		
+		list = customerDao.retrieveAll();
+		return list;
+	}
+	@Override
+	public Set<AccountDTO> fetchAccountList(int customerId) {
+		Set<AccountDTO> list = new TreeSet<AccountDTO>();
+		list = accountDao.retrieveAll(customerId);
+		
+		return list;
+	}
+	@Override
+	public Set<TransactionHistoryDTO> fetchTransactionHistory(int customerId) {
+		Set<TransactionHistoryDTO> list = new TreeSet<TransactionHistoryDTO>();
+		list = accountDao.retrieveTransactionHistory(customerId);
 		
 		return list;
 	}
 	
 	@Override
-	public void update() {
+	public void updateAccount(AccountDTO updatedAccount) {
 		
+		accountDao.update(updatedAccount);
 	}
 	
-	public static void main(String[] args) {
-		
+	
+	
+	@Override
+	public void deleteAdmin(AdminDTO admin){
+		adminDao.delete(admin);
 	}
+	@Override
+	public void deleteCustomer(CustomerDTO customer){
+		customerDao.delete(customer);
+	}
+	@Override
+	public void deleteAccount(AccountDTO account)  {
+		accountDao.delete(account);
+	}
+	
 }

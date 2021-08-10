@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.CustomerDTO;
 import com.oguzcan.dto.PersonalInformationDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
@@ -16,6 +19,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	private CustomerDTO customerDto;
 	private PreparedStatement stmt;
 	
+	// a lot of problems
 	@Override
 	public void create(CustomerDTO customer) throws ClientAlreadyExistsException{
 		String sql = "insert into mydb.customer(username, password) values(?,?)";
@@ -46,7 +50,8 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			
 		} catch (SQLException ex) {
-			System.out.println("AdminDAO create sqlException.");
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 	}
 
@@ -79,7 +84,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	}
 
 	@Override
-	public void delete(CustomerDTO customer) throws NoSuchClientException{
+	public void delete(CustomerDTO customer) {
 		String sql = "delete from mydb.info where customer_id=?";
 				
 		try (Connection connection = dbConnection()) {
@@ -111,15 +116,16 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		}
 	}
 
+
 	@Override
 	public CustomerDTO retrieve(String input) throws NoSuchClientException{
 		String sql = "SELECT * FROM mydb.customer inner join mydb.info "
 				+ "on customer.customer_id = info.customer_id "
-				+ "where customer.customer_id = ?";
+				+ "where customer.username = ?";
 		
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(0, Integer.parseInt(input));
+			stmt.setString(1, input);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
@@ -129,19 +135,37 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 						.accountList(null).username(rs.getString("username")).password(rs.getString("password")).info(info).build();
 			}
 			if(customerDto == null) {
-				throw new NoSuchClientException("Böyle bir müşteri yok. Tekrar deneyiniz!\n");
+				throw new NoSuchClientException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 		return customerDto;
-		
 	}
 
 	@Override
-	public CustomerDTO retrieveById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CustomerDTO retrieveById(int id){
+		String sql = "SELECT * FROM mydb.customer inner join mydb.info "
+				+ "on customer.customer_id = info.customer_id "
+				+ "where customer.customer_id = ?";
+		
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setInt(0, id);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				PersonalInformationDTO info = new PersonalInformationDTO.Builder()
+						.name(rs.getString("first_name")).lastname("last_name").phoneNumber("phone_number").build();
+				customerDto = new CustomerDTO.Builder()
+						.accountList(null).username(rs.getString("username")).password(rs.getString("password")).info(info).build();
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		}
+		return customerDto;
 	}
 
 
@@ -149,7 +173,37 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+//	String sql = "SELECT * FROM mydb.customer inner join mydb.info "
+//			+ "on customer.customer_id = info.customer_id "
+//			+ "where customer.customer_id = ?";
 	
+
+	public Set<CustomerDTO> retrieveAll() {
+		String sql = "select * from mydb.customer inner join mydb.info "
+				+ "on customer.customer_id = info.customer_id ";
+		
+		Set<CustomerDTO> list = new TreeSet<CustomerDTO>();
+		PersonalInformationDTO info;
+		
+		try (Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				info = new PersonalInformationDTO.Builder()
+						.name(rs.getString("first_name")).lastname(rs.getString("last_name"))
+						.phoneNumber(rs.getString("phone_number")).build();
+				customerDto = new CustomerDTO.Builder()
+						.customerId(rs.getInt("customer_id")).username(rs.getString("username"))
+						.password(rs.getString("password")).info(info)
+						.accountList(new TreeSet<AccountDTO>()).build();
+				list.add(customerDto);
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		}
+		return list;
+	}
 
 }
