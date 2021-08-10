@@ -3,19 +3,21 @@ package com.oguzcan.dto;
 import java.io.Serializable;
 import java.util.Set;
 
-public class CustomerDTO implements Serializable, Client {
+public class CustomerDTO implements Serializable, User, Comparable<Object>{
 	private static final long serialVersionUID = -898475110260482733L;
 
-	private Set<AccountDTO> accountList;
+	private Set<AccountDTO> accountList;  // TreeSet
 	private String username;
 	private String password;
 	private PersonalInformationDTO info;
+	private int customerId;
 
 	public CustomerDTO(Builder builder) {
 		this.accountList = builder.accountList;
 		this.username = builder.username;
 		this.password = builder.password;
 		this.info = builder.info;
+		this.customerId = builder.customerId;
 	}
 	public CustomerDTO() {
 		
@@ -27,7 +29,7 @@ public class CustomerDTO implements Serializable, Client {
 		private String username;
 		private String password;
 		private PersonalInformationDTO info;
-
+		private int customerId = 0;
 		
 		public Builder accountList(Set<AccountDTO> accountList) {
 			this.accountList = accountList;
@@ -43,6 +45,10 @@ public class CustomerDTO implements Serializable, Client {
 		}
 		public Builder info(PersonalInformationDTO info) {
 			this.info = info;
+			return this;
+		}
+		public Builder customerId(int customerId) {
+			this.customerId = customerId;
 			return this;
 		}
 		public CustomerDTO build() {
@@ -75,11 +81,27 @@ public class CustomerDTO implements Serializable, Client {
 	public void setInfo(PersonalInformationDTO info) {
 		this.info = info;
 	}
-
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	
+	
+	@Override
+	public int compareTo(Object o) {
+		CustomerDTO customer = (CustomerDTO) o;
+		
+		if(customerId == customer.getCustomerId()) {
+			return 0;
+		}
+		
+		return customerId > customer.getCustomerId() ? 1 : -1;
+	}
 	
 	@Override
 	public String toString() {
-		return "Customer [accountList=" + accountList + ", username=" + username + ", password=" + password + ", info="
-				+ info + "]";
+		return  customerId + " " + info.getName() + " " + info.getLastname();
 	}
 }

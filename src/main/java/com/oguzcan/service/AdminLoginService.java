@@ -4,16 +4,16 @@ import com.oguzcan.dao.AdminDAO;
 import com.oguzcan.dao.GenericDAO;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.NoSuchClientException;
-import com.oguzcan.ex.WrongCustomerCredentialsException;
+import com.oguzcan.ex.WrongClientCredentialsException;
 
-public class AdminLoginService implements LoginService{
+public class AdminLoginService implements LoginService<AdminDTO>{
 
 	private GenericDAO<AdminDTO> adminDao = new AdminDAO();
-	private PasswordValidatorService passwordValidator;
+
 	
 	@Override
 	public AdminDTO login(String username, String password) 
-			throws WrongCustomerCredentialsException, NoSuchClientException {
+			throws WrongClientCredentialsException, NoSuchClientException {
 		
 		AdminDTO admin = adminDao.retrieve(username);
 		System.out.println(admin);
@@ -23,18 +23,18 @@ public class AdminLoginService implements LoginService{
 	}
 	
 	private void loginAdmin(AdminDTO admin, String password) 
-			throws WrongCustomerCredentialsException{
+			throws WrongClientCredentialsException{
 		
 	//	passwordValidator.validate(password);
 		checkAdminPassword(admin, password);
-		adminDao.update(admin);
+		
 	}
 	
 	private void checkAdminPassword(AdminDTO admin, String password) 
-			throws WrongCustomerCredentialsException {
+			throws WrongClientCredentialsException {
 		
 		if(!admin.getPassword().equals(password)) {
-			throw new WrongCustomerCredentialsException("Parola Hatalı");
+			throw new WrongClientCredentialsException("Parola Hatalı");
 		}
 	}
 

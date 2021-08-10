@@ -1,5 +1,5 @@
 package com.oguzcan.dto;
 
-public interface Client {
+public interface User {
 
 }

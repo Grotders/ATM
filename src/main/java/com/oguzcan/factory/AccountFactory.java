@@ -1,6 +1,9 @@
 package com.oguzcan.factory;
 
-public interface AccountFactory extends CustomerFactory{
+import com.oguzcan.dto.AccountDTO;
 
-	
+public interface AccountFactory {
+
+	public AccountDTO create(int accNumber, double balance, String accountType, int customerId);
+	public AccountDTO copy(AccountDTO account);
 }

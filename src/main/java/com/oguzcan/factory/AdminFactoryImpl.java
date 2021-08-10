@@ -3,13 +3,20 @@ package com.oguzcan.factory;
 import com.oguzcan.dto.AdminDTO;
 
 public class AdminFactoryImpl implements AdminFactory{
-	private AdminDTO admin;
 	
 	@Override
-	public void create() {
+	public AdminDTO create(String username, String password) {
+		AdminDTO admin = new AdminDTO.Builder()
+				.username(username).password(password).build();
 		
-		
-		
+		return admin;
+	}
+
+	@Override
+	public AdminDTO copy(AdminDTO admin) {
+		AdminDTO copyAdmin = new AdminDTO.Builder()
+				.username(admin.getUsername()).password(admin.getPassword()).build();
+		return copyAdmin;
 	}
 
 }

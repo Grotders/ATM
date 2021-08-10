@@ -12,9 +12,11 @@ public interface GenericDAO<T> {
 	// CRUD
 	void create(T t) throws ClientAlreadyExistsException;
 	void update(T t);
-	void delete(T t);
-	T retrieve(String username) throws NoSuchClientException;
-	void refresh(T t);
+	void delete(T t) throws NoSuchClientException;
+	T retrieve(String username) throws NoSuchClientException;  // primary key ile getirme
+	T retrieveById(int id);
+
+	
 	
 	default Connection dbConnection() {
 		DatabaseUtil databaseUtil = new DatabaseUtil();
