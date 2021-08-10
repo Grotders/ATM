@@ -24,14 +24,12 @@ import com.oguzcan.view.BankView;
 
 public class BankController {
 	private final BankView view = new BankView();
-
 	private final LoginService<AdminDTO> loginService = new AdminLoginService();
 	private final InputController input = new InputController();
-	private AdminFactory aFactory = new AdminFactoryImpl();
-	private CustomerFactory cFactory = new CustomerFactoryImpl();
-	private AccountFactory acFactory = new AccountFactoryImpl();
-	
-	private AdminService adminService = new AdminServiceImpl();
+	private final AccountFactory acFactory = new AccountFactoryImpl();
+	private final AdminFactory aFactory = new AdminFactoryImpl();
+	private final CustomerFactory cFactory = new CustomerFactoryImpl();
+	private final AdminService adminService = new AdminServiceImpl();
 
 	// Logged in user 
 	private AdminDTO loggedInAdmin;
@@ -51,7 +49,7 @@ public class BankController {
 	private final int BUSINESS = 2;
 	private final int TYPE = 3;
 	private final int TRANSACTION_HISTORY = 4;
-	
+	private final String YES = "y";
 	
 	
 	public void init() {
@@ -93,7 +91,7 @@ public class BankController {
 	private void adminPanel() {
 		top:
 		while(true) {
-		view.displayAdminPanel();
+		view.displayAdminCreateView();
 
 			loop:
 			while(true) {
@@ -111,7 +109,7 @@ public class BankController {
 	private void createPanel() {
 		top:
 		while(true) {
-			view.displayAdminCreatePanel();
+			view.displayAdminCreateView();
 			while(true) {
 				switch(input.nextInt()) {
 					case ADMIN: createAdminPanel(); break top;
@@ -124,7 +122,7 @@ public class BankController {
 	}
 //  1-1
 	private void createAdminPanel() {
-		view.displayCreateAdminPanel();
+		view.displayCreateAdminView();
 		
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
@@ -139,7 +137,7 @@ public class BankController {
 	}
 //  1-2
 	private void createCustomerPanel() {
-		view.displayCreateCustomerPanel();
+		view.displayCreateCustomerView();
 		
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
@@ -159,12 +157,12 @@ public class BankController {
 
 //2 ################################## FETCH ###################################
 	private void fetchPanel() {
-		view.displayAdminFetchPanel();
+		view.displayAdminFetchMenuView();
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-					case ADMIN: fetchAdminPanel(); break loop;
-					case FETCH: fetchCustomerPanel(); break loop;
+					case ADMIN: listAdminPanel(); break loop;
+					case FETCH: listCustomerPanel(); break loop;
 					case BACK: break loop;
 					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
@@ -172,9 +170,9 @@ public class BankController {
 	}
 
 //  2-1
-	private void fetchAdminPanel() {
+	private void listAdminPanel() {
 		Set<AdminDTO> adminList = adminService.fetchAdminList();
-		view.displayAdminListPanel(adminList);
+		view.displayAdminListView(adminList);
 		AdminDTO fetchedAdmin;
 		loop: 
 			while(true) {
@@ -187,26 +185,26 @@ public class BankController {
 				}
 				System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
 			}
-		fetchAdminMenuPanel(fetchedAdmin);
+		adminMenuPanel(fetchedAdmin);
 	}
 	
 //  2-1-1
-	private void fetchAdminMenuPanel(AdminDTO fetchedAdmin) {
-		view.displayFetchedAdminPanel(fetchedAdmin);
+	private void adminMenuPanel(AdminDTO fetchedAdmin) {
+		view.displayFetchedAdminMenuView(fetchedAdmin);
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case UPDATE: updateAdmin(fetchedAdmin); break loop;
-				case DELETE: deleteAdmin(fetchedAdmin); break loop;
+				case UPDATE: updateAdminPanel(fetchedAdmin); break loop;
+				case DELETE: deleteAdminPanel(fetchedAdmin); break loop;
 				case BACK: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
 	}
 //  2-1-1-1
-	private void updateAdmin(AdminDTO fetchedAdmin) {
+	private void updateAdminPanel(AdminDTO fetchedAdmin) {
 		AdminDTO updatedAdmin = aFactory.copy(fetchedAdmin);
-		view.displayAdminUpdatePanel();
+		view.displayUpdateAdminView();
 		loop:
 		while(true) {
 			String username = input.nextString("Kullanıcı adı: ");
@@ -227,8 +225,8 @@ public class BankController {
 		
 	}
 // 2-1-1-2
-	private void deleteAdmin(AdminDTO fetchedAdmin)  {
-		view.displayAdminDeletePanel(fetchedAdmin);
+	private void deleteAdminPanel(AdminDTO fetchedAdmin)  {
+		view.displayDeleteAdminView(fetchedAdmin);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteAdmin(fetchedAdmin);
@@ -236,9 +234,9 @@ public class BankController {
 	}
 
 // 2-2
-	private void fetchCustomerPanel() {
+	private void listCustomerPanel() {
 		Set<CustomerDTO> customerList = adminService.fetchCustomerList();
-		view.displayCustomerListPanel(customerList);
+		view.displayCustomerListView(customerList);
 		CustomerDTO fetchedCustomer;
 		loop: 
 			while(true) {
@@ -251,21 +249,21 @@ public class BankController {
 				}
 				System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
 			}
-		fetchCustomerMenuPanel(fetchedCustomer);
+		customerMenuPanel(fetchedCustomer);
 	}
 
 // 2-2-1
-	private void fetchCustomerMenuPanel(CustomerDTO fetchedCustomer) {
+	private void customerMenuPanel(CustomerDTO fetchedCustomer) {
 		top:
 		while(true) {
-		view.displayFetchedCustomerPanel(fetchedCustomer);
+		view.displayFetchedCustomerMenuView(fetchedCustomer);
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case UPDATE: updateCustomer(fetchedCustomer); break loop;
-				case DELETE: deleteCustomer(fetchedCustomer); break top;
-				case CREATE_ACCOUNT: CreateAccount(fetchedCustomer); break loop;
-				case FETCH_ACCOUNTS: fetchAccountPanel(fetchedCustomer); break loop;
+				case UPDATE: updateCustomerPanel(fetchedCustomer); break loop;
+				case DELETE: deleteCustomerPanel(fetchedCustomer); break top;
+				case CREATE_ACCOUNT: createAccountPanel(fetchedCustomer); break loop;
+				case FETCH_ACCOUNTS: listAccountPanel(fetchedCustomer); break loop;
 				case BACK2: break top;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
@@ -274,9 +272,9 @@ public class BankController {
 	}
 
 // 2-2-1-1
-	private void updateCustomer(CustomerDTO fetchedCustomer) {
+	private void updateCustomerPanel(CustomerDTO fetchedCustomer) {
 		CustomerDTO updatedCustomer = cFactory.copy(fetchedCustomer);
-		view.displayCustomerUpdatePanel();
+		view.displayUpdateCustomerView();
 		
 		loop:
 		while(true) {
@@ -306,16 +304,16 @@ public class BankController {
 	}
 	
 // 2-2-1-2
-	private void deleteCustomer(CustomerDTO fetchedCustomer) {
-		view.displayCustomerDeletePanel(fetchedCustomer);
+	private void deleteCustomerPanel(CustomerDTO fetchedCustomer) {
+		view.displayDeleteCustomerView(fetchedCustomer);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteCustomer(fetchedCustomer);
 		} 
 	}
 // 2-2-1-3
-	private void CreateAccount(CustomerDTO fetchedCustomer) {
-		view.displayCreateAccountPanel();
+	private void createAccountPanel(CustomerDTO fetchedCustomer) {
+		view.displayCreateAccountView();
 		String accountType;
 		
 		loop:
@@ -333,12 +331,12 @@ public class BankController {
 		System.out.println("Hesap başarıyla oluşturuldu.");
 	}
 // 2-2-1-4
-	private void fetchAccountPanel(CustomerDTO fetchCustomer) {
+	private void listAccountPanel(CustomerDTO fetchCustomer) {
 		Set<AccountDTO> accountList = adminService.fetchAccountList(fetchCustomer.getCustomerId());
 		fetchCustomer.setAccountList(accountList);
 	
 		try {
-			view.displayAccountListPanel(accountList);
+			view.displayAccountListView(accountList);
 			AccountDTO fetchedAccount;
 			loop: 
 				while(true) {
@@ -351,32 +349,32 @@ public class BankController {
 					}
 					System.out.print("Hatalı hesap numarası girdiniz! Tekrar deneyiniz: ");
 				}
-			fetchAccountMenuPanel(fetchedAccount);
+			accountMenuPanel(fetchedAccount);
 		} catch(NullPointerException ex) {
 			System.out.println("Müşterinin hiç hesabı bulunmamaktadır.");
 		}
 		
 	}
 // 2-2-1-4-1
-	private void fetchAccountMenuPanel(AccountDTO fetchedAccount) {
-		view.displayFetchedAccountPanel(fetchedAccount);
+	private void accountMenuPanel(AccountDTO fetchedAccount) {
+		view.displayFetchedAccountView(fetchedAccount);
 		
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case UPDATE: updateAccount(fetchedAccount); break loop;
-				case DELETE: deleteAccount(fetchedAccount); break loop;
-				case TYPE: changeTypeAccount(fetchedAccount); break loop;
-				case TRANSACTION_HISTORY: accountHistory(fetchedAccount); break loop;
+				case UPDATE: updateBalancePanel(fetchedAccount); break loop;
+				case DELETE: deleteAccountPanel(fetchedAccount); break loop;
+				case TYPE: changeAccountTypePanel(fetchedAccount); break loop;
+				case TRANSACTION_HISTORY: accountHistoryPanel(fetchedAccount); break loop;
 				case BACK2: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
 	}
 // 2-2-1-4-1-1
-	private void updateAccount(AccountDTO fetchedAccount) {
+	private void updateBalancePanel(AccountDTO fetchedAccount) {
 		AccountDTO updatedAccount = acFactory.copy(fetchedAccount);
-		view.displayAccountBalanceUpdatePanel(fetchedAccount);
+		view.displayUpdateBalanceView(fetchedAccount);
 		
 		double balance = input.nextDouble();
 		
@@ -385,8 +383,8 @@ public class BankController {
 		
 	}
 // 2-2-1-4-1-2
-	private void deleteAccount(AccountDTO fetchedAccount) {
-		view.displayAccountDeletePanel(fetchedAccount);
+	private void deleteAccountPanel(AccountDTO fetchedAccount) {
+		view.displayDeleteAccountView(fetchedAccount);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteAccount(fetchedAccount);
@@ -394,8 +392,8 @@ public class BankController {
 		
 	}
 // 2-2-1-4-1-3
-	private void changeTypeAccount(AccountDTO fetchedAccount) {
-		view.displayAccountTypeChangePanel(fetchedAccount);
+	private void changeAccountTypePanel(AccountDTO fetchedAccount) {
+		view.displayChangeAccountTypeView(fetchedAccount);
 		
 		String currentType = fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase();
 		AccountDTO updatedAccount;
@@ -416,10 +414,10 @@ public class BankController {
 		}
 	}
 // 2-2-1-4-1-4
-	private void accountHistory(AccountDTO fetchedAccount) {
+	private void accountHistoryPanel(AccountDTO fetchedAccount) {
 		Set<TransactionHistoryDTO> history = 
 				adminService.fetchTransactionHistory (fetchedAccount.getAccNumber());
-		view.displayTransactionHistoryPanel(history);
+		view.displayTransactionHistoryView(history);
 		input.nextString();
 	}
 	

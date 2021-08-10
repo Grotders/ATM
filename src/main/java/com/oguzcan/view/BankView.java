@@ -15,7 +15,7 @@ public class BankView {
 		System.out.println("Giriş yapınız:");
 	}
 	
-	public void displayAdminPanel() {
+	public void displayAdminMenu() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
@@ -25,7 +25,7 @@ public class BankView {
 	}
 
 //1 ############################### CREATE PANEL ###############################
-	public void displayAdminCreatePanel() {
+	public void displayAdminCreateView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Kullanıcı oluştur.\n");
 		
@@ -35,20 +35,20 @@ public class BankView {
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 1-1
-	public void displayCreateAdminPanel() {
+	public void displayCreateAdminView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin oluştur.\n");
 		System.out.println("Oluşturulacak admin kullanıcısının bilgilerini giriniz.");
 	}
 	// 1-2
-	public void displayCreateCustomerPanel() {
+	public void displayCreateCustomerView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri oluştur.\n");
 		System.out.println("Oluşturulacak müşteri kullanıcısının bilgilerini giriniz.");
 	}
 
 //2 ############################### FETCH PANEL ################################
-	public void displayAdminFetchPanel() {
+	public void displayAdminFetchMenuView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Kullanıcı incele.\n");
 		System.out.println("İncelemek istediğiniz kullanıcının tipini seçiniz: ");
@@ -58,7 +58,7 @@ public class BankView {
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1
-	public void displayAdminListPanel(Set<AdminDTO> adminList) {
+	public void displayAdminListView(Set<AdminDTO> adminList) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin incele.\n");
 		
@@ -70,7 +70,7 @@ public class BankView {
 		System.out.print("Incelemek istediğiniz adminin id'sini giriniz: ");
 	}
 	// 2-1-1
-	public void displayFetchedAdminPanel(AdminDTO fetchedAdmin) {
+	public void displayFetchedAdminMenuView(AdminDTO fetchedAdmin) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin Id=" + fetchedAdmin.getAdminId() 
 							   + " Username=" + fetchedAdmin.getUsername() +"\n");
@@ -82,20 +82,20 @@ public class BankView {
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-1-1
-	public void displayAdminUpdatePanel() {
+	public void displayUpdateAdminView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin güncelle.\n");
 		System.out.println("Güncellemek istediğiniz bilgileri giriniz. Boş bıraktığınız bilgiler değişmeyecektir:");
 	}
 	// 2-1-1-2
-	public void displayAdminDeletePanel(AdminDTO fetchedAdmin) {
+	public void displayDeleteAdminView(AdminDTO fetchedAdmin) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Admin sil.\n");
 		System.out.println( fetchedAdmin +" kullanıcı silinecek.");
 		System.out.print("\nDevam etmek için (Y/y) giriniz:");
 	}
 	// 2-2
-	public void displayCustomerListPanel(Set<CustomerDTO> customerList) {
+	public void displayCustomerListView(Set<CustomerDTO> customerList) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri incele.\n");
 		
@@ -107,7 +107,7 @@ public class BankView {
 		System.out.print("Incelemek istediğiniz müşterinin id'sini giriniz: ");
 	}
 	//2-1-1 	#### CUSTOMER ####
-	public void displayFetchedCustomerPanel(CustomerDTO fetchedCustomer) {
+	public void displayFetchedCustomerMenuView(CustomerDTO fetchedCustomer) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: " + fetchedCustomer.getCustomerId() + " " + fetchedCustomer.getInfo().getName() 
 										+ " " + fetchedCustomer.getInfo().getLastname() + "\n");
@@ -122,7 +122,7 @@ public class BankView {
 	}
 	
 	// 2-1-1-1
-	public void displayCustomerUpdatePanel() {
+	public void displayUpdateCustomerView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri güncelle.\n");
 		System.out.println("Güncellemek istediğiniz bilgileri giriniz. Boş bıraktığınız bilgiler değişmeyecektir:");
@@ -130,14 +130,14 @@ public class BankView {
 	}
 	
 	// 2-1-1-2
-		public void displayCustomerDeletePanel(CustomerDTO fetchedCustomer) {
+		public void displayDeleteCustomerView(CustomerDTO fetchedCustomer) {
 			System.out.println("\n\n\n\n\n\n");
 			System.out.println("Admin Panel: Müşteri sil.\n");
 			System.out.println(fetchedCustomer + " kullanıcı silinecek.");
 			System.out.print("\nDevam etmek için (Y/y) giriniz:");
 		}
 	// 2-1-2-3
-	public void displayCreateAccountPanel() {
+	public void displayCreateAccountView() {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Hesap oluştur.\n");
 		System.out.println("Oluşturulacak müşteri hesabının bilgilerini giriniz.");
@@ -147,7 +147,7 @@ public class BankView {
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-2-4 		
-	public void displayAccountListPanel(Set<AccountDTO> accountList) throws NullPointerException {
+	public void displayAccountListView(Set<AccountDTO> accountList) throws NullPointerException {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Hesap incele.\n");
 		
@@ -160,7 +160,7 @@ public class BankView {
 		
 	}
 	// 2-1-2-3-1 	#### ACCOUNT ####
-	public void displayFetchedAccountPanel(AccountDTO fetchedAccount) {
+	public void displayFetchedAccountView(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println(fetchedAccount.getAccNumber() + " " +
 				fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase()
@@ -174,21 +174,21 @@ public class BankView {
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-2-3-1-1
-	public void displayAccountBalanceUpdatePanel(AccountDTO fetchedAccount) {
+	public void displayUpdateBalanceView(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Bakiye güncelle.\n");
 		System.out.println("Mevcut bakiye: " + fetchedAccount.getBalance());
 		System.out.println("Bakiye giriniz (min 0):");
 	}
 	// 2-1-2-3-1-2
-	public void displayAccountDeletePanel(AccountDTO fetchedAccount) {
+	public void displayDeleteAccountView(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Müşteri sil.\n");
 		System.out.println( fetchedAccount +" hesap silinecek.");
 		System.out.print("\nDevam etmek için (Y/y) giriniz:");
 	}
 	// 2-1-2-3-1-3
-	public void displayAccountTypeChangePanel(AccountDTO fetchedAccount) {
+	public void displayChangeAccountTypeView(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Tip değiştir.\n");
 		System.out.println("Mevcut hesabınızın tipi: " 
@@ -196,7 +196,7 @@ public class BankView {
 		System.out.println("Hesap tipi değişecek, devam etmek için (Y/y) giriniz. (Basic->Business, Business->Basic)");
 	}
 	// 2-1-2-4
-	public void displayTransactionHistoryPanel(Set<TransactionHistoryDTO> history) {
+	public void displayTransactionHistoryView(Set<TransactionHistoryDTO> history) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println("Admin Panel: Hesap İşlem geçmişi.");
 		System.out.println("Hesabın işlem geçmişi asağıda görüntülenmektedir.");
