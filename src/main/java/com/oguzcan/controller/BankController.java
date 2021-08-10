@@ -91,7 +91,7 @@ public class BankController {
 	private void adminPanel() {
 		top:
 		while(true) {
-		view.displayAdminCreateView();
+		view.displayAdminMenu();
 
 			loop:
 			while(true) {
@@ -357,7 +357,7 @@ public class BankController {
 	}
 // 2-2-1-4-1
 	private void accountMenuPanel(AccountDTO fetchedAccount) {
-		view.displayFetchedAccountView(fetchedAccount);
+		view.displayFetchedAccountMenuView(fetchedAccount);
 		
 		loop:
 			while(true) {

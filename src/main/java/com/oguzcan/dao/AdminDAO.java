@@ -18,7 +18,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 	private PreparedStatement stmt;
 	
 	@Override
-	public void create(AdminDTO admin) throws ClientAlreadyExistsException{
+	public int create(AdminDTO admin) throws ClientAlreadyExistsException{
 		String sql = "insert into mydb.admin(username, password) values(?,?)";
 		
 		try(Connection connection = dbConnection()) {
@@ -33,6 +33,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
+		return 0;
 	}
 
 	@Override

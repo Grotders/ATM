@@ -1,66 +1,57 @@
 package com.oguzcan.dao;
 
+import java.util.Set;
+
 import com.oguzcan.controller.InputController;
-import com.oguzcan.dto.AdminDTO;
-import com.oguzcan.ex.ClientAlreadyExistsException;
+import com.oguzcan.dto.AccountDTO;
+import com.oguzcan.dto.TransactionHistoryDTO;
+import com.oguzcan.factory.AccountFactory;
+import com.oguzcan.factory.AccountFactoryImpl;
+import com.oguzcan.factory.AdminFactory;
+import com.oguzcan.factory.AdminFactoryImpl;
+import com.oguzcan.factory.CustomerFactory;
+import com.oguzcan.factory.CustomerFactoryImpl;
+import com.oguzcan.factory.TransactionHistoryFactory;
+import com.oguzcan.factory.TransactionHistoryFactoryImpl;
 
 public class DAOTest {
 	InputController input = new InputController();
-	AdminDAO dao = new AdminDAO();
+	AdminDAO aDao = new AdminDAO();
+	AccountDAO acDao = new AccountDAO();
+	CustomerDAO cDao = new CustomerDAO();
 	
+	AdminFactory aFactory = new AdminFactoryImpl();
+	AccountFactory acFactory = new AccountFactoryImpl();
+	CustomerFactory cFactory = new CustomerFactoryImpl();
+	TransactionHistoryFactory tFactory = new TransactionHistoryFactoryImpl();
 	
 	public static void main(String[] args) {
 		DAOTest test = new DAOTest();
 		
-//		test.adminCreateTest();
-//		test.adminDeleteTest();
-		test.xString();
+		
+// 	Transaction Tests
+//		test.createTransactionTest();
+//		test.transactionList();
 	}
 	
-	public void adminCreateTest() {
-		while (true) {
-			try {
-				System.out.print("Kullanıcı: ");
-				String username = input.nextString();
-				System.out.print("Sifre: ");
-				String pass = input.nextString();
-				
-				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).build();
-			
-				dao.create(adminTest);
-				break;
-			} catch (ClientAlreadyExistsException ex) {
-				System.out.println(ex.getMessage());
-				continue;
-			}
-		}
-	}
-	
-	public void adminDeleteTest() {
-		while (true) {
-			try {
-				System.out.print("Kullanıcı: ");
-				String username = input.nextString();
-				System.out.print("Sifre: ");
-				String pass = input.nextString();
-				
-				AdminDTO adminTest = new AdminDTO.Builder().username(username).password(pass).build();
-				dao.delete(adminTest);
-				break;
-			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
-				continue;
-			}
-		}
-	}
-	
-	void xString() {
-		String a = "BasicAccountDTO";
-		String a2 = "BusinessAccountDTO";
-		System.out.println(a.replace("AccountDTO", "").toLowerCase());
-		System.out.println(a2.replace("AccountDTO", "").toLowerCase());
+// ############################## ACCOUNTDAO TEST ##############################  
+	public void createAccountTest() {
+		AccountDTO account = acFactory.create(0, 10000, "basic", 1);
+		acDao.create(account);
+		acDao.createTransaction("hesap oluşturma", 21);
 		
 	}
+	public void createTransactionTest() {
+		acDao.createTransaction("test", 1);
+	}
+	
+	public void transactionList() {
+		Set<TransactionHistoryDTO> history = acDao.retrieveTransactionHistory(1);
+		for(TransactionHistoryDTO temp:history) {
+			System.out.println(temp);
+		}
+	}
+	
 }
 	
 	

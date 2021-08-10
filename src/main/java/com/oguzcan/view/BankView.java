@@ -160,7 +160,7 @@ public class BankView {
 		
 	}
 	// 2-1-2-3-1 	#### ACCOUNT ####
-	public void displayFetchedAccountView(AccountDTO fetchedAccount) {
+	public void displayFetchedAccountMenuView(AccountDTO fetchedAccount) {
 		System.out.println("\n\n\n\n\n\n");
 		System.out.println(fetchedAccount.getAccNumber() + " " +
 				fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase()
@@ -204,6 +204,4 @@ public class BankView {
 			System.out.println(temp);
 		System.out.println("Devam etmek için herhangi bir tuşa basınız.");
 	}
-	
-	
 }

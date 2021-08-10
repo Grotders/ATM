@@ -29,11 +29,20 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
 	}
 	@Override
 	public void createCustomer(CustomerDTO customer) throws ClientAlreadyExistsException {
-		customerDao.create(customer);
+		int accNumber = customerDao.create(customer);
+		
+		
 	}
 	@Override
 	public void createAccount(AccountDTO account) {
 		accountDao.create(account);
+		Set<AccountDTO> list = accountDao.retrieveAll(account.getCustomerId());
+		for(AccountDTO temp: list) {
+			if(temp.getBalance() == 0 && account.getClass() == temp.getClass()) {
+				account = temp;
+			}
+		}
+		accountDao.createTransaction("hesap oluşturma", account.getAccNumber());
 	}
 
 // ################################## FETCH ##################################

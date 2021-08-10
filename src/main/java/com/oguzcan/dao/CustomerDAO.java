@@ -17,42 +17,48 @@ import com.oguzcan.ex.NoSuchClientException;
 public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	private ResultSet rs;
 	private CustomerDTO customerDto;
+	private AccountDTO accountDto;
+	private AccountDAO accountDao;
 	private PreparedStatement stmt;
 	
 	// a lot of problems
 	@Override
-	public void create(CustomerDTO customer) throws ClientAlreadyExistsException{
+	public int create(CustomerDTO customer) throws ClientAlreadyExistsException{
 		String sql = "insert into mydb.customer(username, password) values(?,?)";
-		
+		int customerId = 0;
 		try(Connection connection = dbConnection()) {
+			
 			// INSERT customer
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, customer.getUsername());
 			stmt.setString(2, customer.getPassword());
 			stmt.executeUpdate();
-			
-		} catch (MySQLIntegrityConstraintViolationException ex) {
-			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
-		} catch (SQLException ex) {
-			System.out.println("AdminDAO create sqlException.");
-		}
-		
-		try(Connection connection = dbConnection()) {
-			// INSERT personal information
-			sql = "insert into mydb.info(first_name, last_name, phone_number) values(?,?,?)";
+			// GET auto increment customer_id
+			sql = "select customer_id from mydb.customer where username = ? and password = ?";
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, customer.getUsername());
+			stmt.setString(2, customer.getPassword());
+			rs = stmt.executeQuery();
+			while(rs.next())
+				customerId = rs.getInt("customer_id");
+			System.out.println(customerId);
+			// INSERT info
+			sql = "insert into mydb.info(first_name, last_name, phone_number, customer_id) values(?,?,?,?)";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, customer.getInfo().getName());
 			stmt.setString(2, customer.getInfo().getLastname());
 			stmt.setString(3, customer.getInfo().getPhoneNumber());
+			stmt.setInt(4, customerId);
 			stmt.executeUpdate();
-	
-			System.out.println("Kullanıcı başarıyla oluşturuldu.");
-		} catch (MySQLIntegrityConstraintViolationException ex) {
 			
+		} catch (MySQLIntegrityConstraintViolationException ex) {
+			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
+		
+		return customerId;
 	}
 
 	@Override
