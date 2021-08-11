@@ -31,9 +31,15 @@ public class CustomerFactoryImpl implements CustomerFactory{
 
 	@Override
 	public CustomerDTO copy(CustomerDTO customer) {
+		PersonalInformationDTO info = customer.getInfo();
+		
+		PersonalInformationDTO newInfo = new PersonalInformationDTO.Builder()
+				.name(info.getName()).lastname(info.getLastname()).phoneNumber(info.getPhoneNumber()).build();
+		
 		CustomerDTO copyCustomer = new CustomerDTO.Builder()
 				.accountList(customer.getAccountList()).username(customer.getUsername())
-				.password(customer.getPassword()).info(customer.getInfo()).build();
+				.password(customer.getPassword()).info(newInfo)
+				.customerId(customer.getCustomerId()).build();
 
 		return copyCustomer;
 	}

@@ -33,10 +33,12 @@ public abstract class AccountDTO implements Serializable, Comparable<Object>{
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	
+	public String getAccountType() {
+		return this.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase();
+	}
 	
 	@Override
 	public String toString() {
-		return accNumber + " balance=" + balance;
+		return accNumber + "=> bakiye: " + balance + " hesap tipi: " + getAccountType();
 	}
 }

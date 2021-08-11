@@ -26,7 +26,6 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			stmt.setString(1, admin.getUsername());
 			stmt.setString(2, admin.getPassword());
 			stmt.executeUpdate();
-			System.out.println("Kullanıcı başarıyla oluşturuldu.");
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
 		} catch (SQLException ex) {
@@ -38,17 +37,15 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 
 	@Override
 	public void update(AdminDTO admin) {
-		String sql = "update mydb.admin set username=?, password=? where id=?";
-		
+		String sql = "update mydb.admin set username=?, password=? where admin_id=?";
+		System.out.println(admin);
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, admin.getUsername());
 			stmt.setString(2, admin.getPassword());
 			stmt.setInt(3, admin.getAdminId());
 			stmt.executeUpdate();
-			System.out.println("Güncelleme başarılı.");
 		} catch(SQLException ex) {
-			System.out.println("hata update");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
@@ -62,9 +59,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 			stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, admin.getAdminId());
 			stmt.executeUpdate();
-			System.out.println("Kullanıcı başarıyla silindi.");
 		} catch (SQLException ex) {
-			System.out.println("hata delete");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}

@@ -2,8 +2,9 @@ package com.oguzcan.controller;
 
 public class Test {
 
+	InputController input = new InputController();
 	public static void main(String[] args) {
-		InputController input = new InputController();
+		
 		
 //		Menu value = Menu.values()[input.nextInt()];
 //		System.out.println(value.name());
@@ -23,8 +24,11 @@ public class Test {
 //		}
 		
 		Test test = new Test();
+		test.interestingTest();
+	}
+	public void test5 () {
 		while (true) { // public enum Menu {CREATE,UPDATE,BACK,MISMATCH;}
-			switch (test.getEnum(input.nextInt())) {
+			switch (getEnum(input.nextInt())) {
 				case CREATE:System.out.println("Oluştur"); break;		// 1
 				case UPDATE: System.out.println("Güncelle"); break;	// 2
 				case BACK: System.out.println("GERİ"); break;			// 3
@@ -38,5 +42,13 @@ public class Test {
 			return Menu.MISMATCH;
 		}
 		return enumArray[index-1];
+	}
+	
+	public void interestingTest() {
+		String x = "3.5";
+		
+		double y;
+		
+		System.out.println(Double.parseDouble(x));
 	}
 }

@@ -27,7 +27,6 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			stmt.setString(2, account.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
 			stmt.setInt(3, account.getCustomerId());
 			stmt.executeUpdate();
-			System.out.println("Kullanıcı başarıyla oluşturuldu.");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 			System.out.println(ex.getMessage()+ "ACCDAO BRO");
@@ -37,17 +36,15 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 
 	@Override
 	public void update(AccountDTO account) {
-		String sql = "update mydb.account set username=?, password=? where account_number=?";
+		String sql = "update mydb.account set balance=?, account_type=? where account_number=?";
 		
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setDouble(1, account.getBalance());
 			stmt.setString(2, account.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
-			stmt.setInt(0, account.getAccNumber());
+			stmt.setInt(3, account.getAccNumber());
 			stmt.executeUpdate();
-			System.out.println("Güncelleme başarılı.");
 		} catch(SQLException ex) {
-			System.out.println("hata update");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
@@ -55,9 +52,15 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 
 	@Override
 	public void delete(AccountDTO account) {
-		String sql = "delete from mydb.account where account_number=?";
-
+		String sql = "delete from mydb.transaction_history where account_number=?";
+ 
 		try (Connection connection = dbConnection()) {
+			// DELETE Transaction history
+			stmt = connection.prepareStatement(sql);
+			stmt.setLong(1, account.getAccNumber());
+			stmt.executeUpdate();
+			// DELETE account
+			sql = "delete from mydb.account where account_number=?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setLong(1, account.getAccNumber());
 			stmt.executeUpdate();
@@ -175,7 +178,6 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			stmt.setString(2, currentTime);
 			stmt.setInt(3, accountNumber);
 			stmt.executeUpdate();
-			System.out.println(type + " başarılı.");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 			System.out.println(ex.getMessage()+ "ACCDAO BRO");

@@ -41,7 +41,6 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			rs = stmt.executeQuery();
 			while(rs.next())
 				customerId = rs.getInt("customer_id");
-			System.out.println(customerId);
 			// INSERT info
 			sql = "insert into mydb.info(first_name, last_name, phone_number, customer_id) values(?,?,?,?)";
 			stmt = connection.prepareStatement(sql);
@@ -50,7 +49,6 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			stmt.setString(3, customer.getInfo().getPhoneNumber());
 			stmt.setInt(4, customerId);
 			stmt.executeUpdate();
-			
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
 		} catch (SQLException ex) {
