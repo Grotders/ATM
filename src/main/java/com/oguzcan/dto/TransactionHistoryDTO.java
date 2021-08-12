@@ -5,11 +5,13 @@ public class TransactionHistoryDTO implements Comparable<Object>{
 	private int transactionId;
 	private String transactionType;
 	private int accountNumber;
+	private String transactionDate;
 	
 	public TransactionHistoryDTO(Builder builder) {
 		this.transactionId = builder.transactionId;
 		this.transactionType = builder.transactionType;
 		this.accountNumber = builder.accountNumber;
+		this.transactionDate = builder.transactionDate;
 	}
 	public TransactionHistoryDTO() {
 		
@@ -20,6 +22,7 @@ public class TransactionHistoryDTO implements Comparable<Object>{
 		private int transactionId;
 		private String transactionType;
 		private int accountNumber;
+		private String transactionDate;
 		
 		public Builder transactionId(int transactionId) {
 			this.transactionId = transactionId;
@@ -31,6 +34,10 @@ public class TransactionHistoryDTO implements Comparable<Object>{
 		}
 		public Builder accountNumber(int accountNumber) {
 			this.accountNumber = accountNumber;
+			return this;
+		}
+		public Builder transactionDate(String transactionDate) {
+			this.transactionDate = transactionDate;
 			return this;
 		}
 		public TransactionHistoryDTO build() {
@@ -70,7 +77,7 @@ public class TransactionHistoryDTO implements Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return "No: " + transactionId + " " + transactionType + " ";
+		return "No: " + transactionId + " " + transactionType + " " + accountNumber;
 	}
 	
 	

@@ -9,7 +9,7 @@ public class TransactionHistoryFactoryImpl implements TransactionHistoryFactory{
 		
 		TransactionHistoryDTO history = new TransactionHistoryDTO.Builder()
 				.transactionId(transactionId).transactionType(transactionType)
-				.accountNumber(accountNumber).build();
+				.transactionDate(transactionType).accountNumber(accountNumber).build();
 		return history;
 	}
 }

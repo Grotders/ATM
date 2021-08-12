@@ -19,36 +19,32 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 	private PreparedStatement stmt;
 	
 	@Override
-	public void create(AccountDTO account) {
+	public int create(AccountDTO account) {
 		String sql = "insert into mydb.account(balance, account_type, customer_id) values(?,?,?)";
-		System.out.println(sql);
-		System.out.println(account);
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setDouble(1, account.getBalance());
 			stmt.setString(2, account.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
 			stmt.setInt(3, account.getCustomerId());
 			stmt.executeUpdate();
-			System.out.println("Kullanıcı başarıyla oluşturuldu.");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 			System.out.println(ex.getMessage()+ "ACCDAO BRO");
 		}
+		return 0;
 	}
 
 	@Override
 	public void update(AccountDTO account) {
-		String sql = "update mydb.account set username=?, password=? where account_number=?";
+		String sql = "update mydb.account set balance=?, account_type=? where account_number=?";
 		
 		try(Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
 			stmt.setDouble(1, account.getBalance());
 			stmt.setString(2, account.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase());
-			stmt.setInt(0, account.getAccNumber());
+			stmt.setInt(3, account.getAccNumber());
 			stmt.executeUpdate();
-			System.out.println("Güncelleme başarılı.");
 		} catch(SQLException ex) {
-			System.out.println("hata update");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
@@ -56,9 +52,15 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 
 	@Override
 	public void delete(AccountDTO account) {
-		String sql = "delete from mydb.account where account_number=?";
-
+		String sql = "delete from mydb.transaction_history where account_number=?";
+ 
 		try (Connection connection = dbConnection()) {
+			// DELETE Transaction history
+			stmt = connection.prepareStatement(sql);
+			stmt.setLong(1, account.getAccNumber());
+			stmt.executeUpdate();
+			// DELETE account
+			sql = "delete from mydb.account where account_number=?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setLong(1, account.getAccNumber());
 			stmt.executeUpdate();
@@ -147,13 +149,11 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 							.accNumber(rs.getInt("account_number")).balance(rs.getDouble("balance"))
 							.customerId(rs.getInt("customer_id")).build();
 					
-					System.out.println(accountDto);
 					accountList.add(accountDto);
 				} else if(rs.getString("account_type").equals("business")) {
 					accountDto = new BusinessAccountDTO.Builder()
 							.accNumber(rs.getInt("account_number")).balance(rs.getDouble("balance"))
 							.customerId(rs.getInt("customer_id")).build();
-					System.out.println(accountDto);
 					accountList.add(accountDto);
 				}
 			}
@@ -162,6 +162,26 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			System.out.println(ex.getMessage());
 		}
 		return accountList;
+	}
+//	String sql = "insert into mydb.account(balance, account_type, customer_id) values(?,?,?)";
+
+	public void createTransaction(String type, int accountNumber) {
+		String sql = "insert into mydb.transaction_history(transaction_type, transaction_date, account_number) values(?,?,?)";
+		
+		java.util.Date dt = new java.util.Date();
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = sdf.format(dt);
+		
+		try(Connection connection = dbConnection()) {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, type);
+			stmt.setString(2, currentTime);
+			stmt.setInt(3, accountNumber);
+			stmt.executeUpdate();
+		} catch (SQLException ex) {
+			System.out.println(ex);
+			System.out.println(ex.getMessage()+ "ACCDAO BRO");
+		}
 	}
 	
 	public Set<TransactionHistoryDTO> retrieveTransactionHistory(int accountNumber) {
@@ -175,6 +195,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
+				String date;
 				history = new TransactionHistoryDTO.Builder()
 						.transactionId(rs.getInt("transaction_id"))
 						.transactionType(rs.getString("transaction_type"))

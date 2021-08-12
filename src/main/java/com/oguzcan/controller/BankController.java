@@ -8,7 +8,11 @@ import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.dto.CustomerDTO;
 import com.oguzcan.dto.TransactionHistoryDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
+import com.oguzcan.ex.NoProperInfoException;
+import com.oguzcan.ex.NoProperPasswordException;
+import com.oguzcan.ex.NoProperUsernameException;
 import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.ValidationException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 import com.oguzcan.factory.AccountFactory;
 import com.oguzcan.factory.AccountFactoryImpl;
@@ -20,19 +24,21 @@ import com.oguzcan.service.AdminLoginService;
 import com.oguzcan.service.AdminService;
 import com.oguzcan.service.AdminServiceImpl;
 import com.oguzcan.service.LoginService;
+import com.oguzcan.util.validator.OnlyNumberValidator;
+import com.oguzcan.util.validator.Validator;
 import com.oguzcan.view.BankView;
 
 public class BankController {
 	private final BankView view = new BankView();
-
 	private final LoginService<AdminDTO> loginService = new AdminLoginService();
 	private final InputController input = new InputController();
-	private AdminFactory aFactory = new AdminFactoryImpl();
-	private CustomerFactory cFactory = new CustomerFactoryImpl();
-	private AccountFactory acFactory = new AccountFactoryImpl();
-	
-	private AdminService adminService = new AdminServiceImpl();
+	private final AccountFactory acFactory = new AccountFactoryImpl();
+	private final AdminFactory aFactory = new AdminFactoryImpl();
+	private final CustomerFactory cFactory = new CustomerFactoryImpl();
+	private final AdminService adminService = new AdminServiceImpl();
 
+	private Validator onlyNumberValidator = new OnlyNumberValidator();
+	
 	// Logged in user 
 	private AdminDTO loggedInAdmin;
 
@@ -51,12 +57,13 @@ public class BankController {
 	private final int BUSINESS = 2;
 	private final int TYPE = 3;
 	private final int TRANSACTION_HISTORY = 4;
-	
+	private final String YES = "y";
 	
 	
 	public void init() {
 		while(true) {
 			view.displayWelcome();
+
 			login();
 		}
 	}
@@ -68,7 +75,6 @@ public class BankController {
  			loginService.login(username, password);
 */			
 			loggedInAdmin = loginService.login("oguzcan", "12345");
-
 			System.out.println("Giriş başarılı! Yönlendiriliyorsunuz ...");
 		} catch (WrongClientCredentialsException ex) {
 			System.out.println(ex.getMessage());
@@ -83,8 +89,8 @@ public class BankController {
 	
 	private void redirecting() {
 		try {
+			view.displaySpace();
 			Thread.sleep(3000);
-			System.out.println("\n\n\n\n\n\n\n");
 		} catch(InterruptedException e) {
 			System.out.println("Thread interrupted");
 		}
@@ -93,7 +99,7 @@ public class BankController {
 	private void adminPanel() {
 		top:
 		while(true) {
-		view.displayAdminPanel();
+		view.displayAdminMenu();
 
 			loop:
 			while(true) {
@@ -109,9 +115,10 @@ public class BankController {
 
 //1 ############################ CREATE ########################################
 	private void createPanel() {
+		view.displaySpace();
 		top:
 		while(true) {
-			view.displayAdminCreatePanel();
+			view.displayAdminCreateView();
 			while(true) {
 				switch(input.nextInt()) {
 					case ADMIN: createAdminPanel(); break top;
@@ -124,22 +131,27 @@ public class BankController {
 	}
 //  1-1
 	private void createAdminPanel() {
-		view.displayCreateAdminPanel();
+		view.displayCreateAdminView();
 		
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
 		
 		AdminDTO admin = aFactory.create(username, password);
 		try {
+			view.displaySpace();
 			adminService.createAdmin(admin);
-			
+			System.out.println("Admin başarıyla oluşturuldu.");
+		} catch (NoProperPasswordException ex) {
+			System.out.println(ex.getMessage());
 		} catch (ClientAlreadyExistsException ex) {
-			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		} catch (ValidationException ex) {
+			System.out.println(ex + "Beklenmedik bir hata meydana geldi.");
 		}
 	}
 //  1-2
 	private void createCustomerPanel() {
-		view.displayCreateCustomerPanel();
+		view.displayCreateCustomerView();
 		
 		String username = input.nextString("Kullanıcı adı: ");
 		String password = input.nextString("Şifre: ");
@@ -151,135 +163,181 @@ public class BankController {
 		CustomerDTO customer = cFactory.create(username, password, customerId, name, lastname, phoneNumber);
 		
 		try {
+			view.displaySpace();
 			adminService.createCustomer(customer);
+			System.out.println("Müşteri başarıyla oluşturuldu.");
+	 
+		} catch (NoProperPasswordException ex) {
+			System.out.println(ex.getMessage());
 		} catch (ClientAlreadyExistsException ex) {
-			System.out.println(ex);
+			System.out.println(ex.getMessage());
+		} catch (ValidationException ex) {
+			System.out.println(ex + "Beklenmedik bir hata meydana geldi.");
 		}
 	}
 
 //2 ################################## FETCH ###################################
 	private void fetchPanel() {
-		view.displayAdminFetchPanel();
-		loop:
+		view.displaySpace();
+		top:
 			while(true) {
-				switch(input.nextInt()) {
-					case ADMIN: fetchAdminPanel(); break loop;
-					case FETCH: fetchCustomerPanel(); break loop;
-					case BACK: break loop;
-					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
-				}
+				view.displayAdminFetchMenuView();
+				loop:
+					while(true) {
+						switch(input.nextInt()) {
+							case ADMIN: listAdminPanel(); break loop;
+							case FETCH: listCustomerPanel(); break loop;
+							case BACK: break top;
+							default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
+						}
+					}
 			}
 	}
 
 //  2-1
-	private void fetchAdminPanel() {
-		Set<AdminDTO> adminList = adminService.fetchAdminList();
-		view.displayAdminListPanel(adminList);
-		AdminDTO fetchedAdmin;
-		loop: 
-			while(true) {
-				int adminId = input.nextInt();
-				for(AdminDTO temp:adminList) {
-					if(temp.getAdminId() == adminId) {
-						fetchedAdmin = temp;
-						break loop;
-					} 
+	private void listAdminPanel() {
+		view.displaySpace();
+		try {
+			Set<AdminDTO> adminList = adminService.fetchAdminList();
+			view.displayAdminListView(adminList);
+			AdminDTO fetchedAdmin;
+			loop: 
+				while(true) {
+					int adminId = input.nextInt();
+					for(AdminDTO temp:adminList) {
+						if(temp.getAdminId() == adminId) {
+							fetchedAdmin = temp;
+							break loop;
+						} 
+					}
+					System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
 				}
-				System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
-			}
-		fetchAdminMenuPanel(fetchedAdmin);
+			adminMenuPanel(fetchedAdmin);
+		} catch (NoSuchClientException ex) {
+			System.out.println(ex.getMessage() + " Menüye geri dönülüyor.");
+		}
 	}
 	
 //  2-1-1
-	private void fetchAdminMenuPanel(AdminDTO fetchedAdmin) {
-		view.displayFetchedAdminPanel(fetchedAdmin);
+	private void adminMenuPanel(AdminDTO fetchedAdmin) {
+		view.displaySpace();
+		view.displayFetchedAdminMenuView(fetchedAdmin);
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case UPDATE: updateAdmin(fetchedAdmin); break loop;
-				case DELETE: deleteAdmin(fetchedAdmin); break loop;
+				case UPDATE: updateAdminPanel(fetchedAdmin); break loop;
+				case DELETE: deleteAdminPanel(fetchedAdmin); break loop;
 				case BACK: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
 	}
 //  2-1-1-1
-	private void updateAdmin(AdminDTO fetchedAdmin) {
-		AdminDTO updatedAdmin = aFactory.copy(fetchedAdmin);
-		view.displayAdminUpdatePanel();
+	private void updateAdminPanel(AdminDTO fetchedAdmin) {
+		view.displaySpace();
+		AdminDTO updatedAdmin;
+		view.displayUpdateAdminView();
 		loop:
 		while(true) {
+			updatedAdmin = aFactory.copy(fetchedAdmin);
 			String username = input.nextString("Kullanıcı adı: ");
 			String password = input.nextString("Şifre: ");
 			
 			if(username == "" && password == "") {
-				System.out.println("İşleminiz iptal edilmiştir."); break loop;
-			} else if (username != "") {
-				updatedAdmin.setPassword(password);
-			} else if(password == "") {
-				updatedAdmin.setUsername(username);
+				System.out.println("Güncelleme işleminiz iptal edilmiştir."); break loop;
 			} else {
-				updatedAdmin.setUsername(username);
-				updatedAdmin.setPassword(password);
+				if (!username.equals("")) {
+					updatedAdmin.setUsername(username);
+				}
+				if(!password.equals("")) {
+					updatedAdmin.setPassword(password);
+				}
 			}
 			
+			try {
+				adminService.updateAdmin(updatedAdmin);
+				view.displaySpace();
+				System.out.println(updatedAdmin.getUsername() + " kullanıcısı başarıyla güncellenmiştir.");
+				break loop;
+			} catch (NoProperUsernameException ex) {
+				System.out.println(ex.getMessage());
+			} catch (NoProperPasswordException ex) {
+				System.out.println(ex.getMessage());
+			} catch (ValidationException ex) {
+				System.out.println("Beklenmedik bir hata oluştu.");
+			}
 		}
-		
 	}
 // 2-1-1-2
-	private void deleteAdmin(AdminDTO fetchedAdmin)  {
-		view.displayAdminDeletePanel(fetchedAdmin);
+	private void deleteAdminPanel(AdminDTO fetchedAdmin)  {
+		view.displaySpace();
+		view.displayDeleteAdminView(fetchedAdmin);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteAdmin(fetchedAdmin);
-		} 
-	}
-
-// 2-2
-	private void fetchCustomerPanel() {
-		Set<CustomerDTO> customerList = adminService.fetchCustomerList();
-		view.displayCustomerListPanel(customerList);
-		CustomerDTO fetchedCustomer;
-		loop: 
-			while(true) {
-				int customerId = input.nextInt();
-				for(CustomerDTO temp:customerList) {
-					if(temp.getCustomerId() == customerId) {
-						fetchedCustomer = temp;
-						break loop;
-					} 
-				}
-				System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
-			}
-		fetchCustomerMenuPanel(fetchedCustomer);
-	}
-
-// 2-2-1
-	private void fetchCustomerMenuPanel(CustomerDTO fetchedCustomer) {
-		top:
-		while(true) {
-		view.displayFetchedCustomerPanel(fetchedCustomer);
-		loop:
-			while(true) {
-				switch(input.nextInt()) {
-				case UPDATE: updateCustomer(fetchedCustomer); break loop;
-				case DELETE: deleteCustomer(fetchedCustomer); break top;
-				case CREATE_ACCOUNT: CreateAccount(fetchedCustomer); break loop;
-				case FETCH_ACCOUNTS: fetchAccountPanel(fetchedCustomer); break loop;
-				case BACK2: break top;
-				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
-				}
-			}
+			view.displaySpace();
+			System.out.println(fetchedAdmin.getUsername() + " kullanıcısı başarıyla silinmiştir.");
+		} else {
+			view.displaySpace();
+			System.out.println("Silme işleminiz iptal edilmiştir.");
 		}
 	}
 
+// 2-2
+	private void listCustomerPanel() {
+		view.displaySpace();
+		try {
+			Set<CustomerDTO> customerList = adminService.fetchCustomerList();
+			view.displayCustomerListView(customerList);
+			CustomerDTO fetchedCustomer;
+			loop: 
+				while(true) {
+					int customerId = input.nextInt();
+					for(CustomerDTO temp:customerList) {
+						if(temp.getCustomerId() == customerId) {
+							fetchedCustomer = temp;
+							break loop;
+						} 
+					}
+					System.out.print("Hatalı id girdiniz! Tekrar deneyiniz: ");
+				}
+			customerMenuPanel(fetchedCustomer);
+		} catch (NoSuchClientException ex) {
+			System.out.println(ex.getMessage() + " Menüye geri dönülüyor.");
+		}
+	}
+
+// 2-2-1
+	private void customerMenuPanel(CustomerDTO fetchedCustomer) {
+		view.displaySpace();
+		top:
+			while(true) {
+				view.displayFetchedCustomerMenuView(fetchedCustomer);
+				loop:
+					while(true) {
+						switch(input.nextInt()) {
+						case UPDATE: updateCustomerPanel(fetchedCustomer); break loop;
+						case DELETE: deleteCustomerPanel(fetchedCustomer); break top;
+						case CREATE_ACCOUNT: createAccountPanel(fetchedCustomer); break loop;
+						case FETCH_ACCOUNTS: listAccountPanel(fetchedCustomer); break loop;
+						case BACK2: break top;
+						default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
+						}
+					}
+			}
+	}
+
 // 2-2-1-1
-	private void updateCustomer(CustomerDTO fetchedCustomer) {
-		CustomerDTO updatedCustomer = cFactory.copy(fetchedCustomer);
-		view.displayCustomerUpdatePanel();
+	private void updateCustomerPanel(CustomerDTO fetchedCustomer) {
+		view.displaySpace();
+		CustomerDTO updatedCustomer; 
+		view.displayUpdateCustomerView();
 		
 		loop:
 		while(true) {
+			updatedCustomer = cFactory.copy(fetchedCustomer);
+			System.out.println(fetchedCustomer);
+			System.out.println(updatedCustomer);
 			String username = input.nextString("Kullanıcı adı: ");
 			String password = input.nextString("Şifre: ");
 			String firstname = input.nextString("Adı: ");
@@ -289,7 +347,7 @@ public class BankController {
 			if(username.equals("") && password.equals("") && firstname.equals("") 
 					&& lastname.equals("") && phoneNumber.equals("") ) {
 				
-				System.out.println("İşleminiz iptal edilmiştir."); break loop;
+				System.out.println("Güncelleme işleminiz iptal edilmiştir."); break loop;
 			} else {
 				if(!username.equals(""))
 					updatedCustomer.setUsername(username);
@@ -302,20 +360,43 @@ public class BankController {
 				if(!phoneNumber.equals(""))
 					updatedCustomer.getInfo().setPhoneNumber(phoneNumber);
 			}
+			System.out.println();
+			
+			try {
+				
+				adminService.updateCustomer(updatedCustomer);
+				
+				
+			} catch (NoProperUsernameException ex) {
+				System.out.println(ex.getMessage());
+			} catch (NoProperPasswordException ex) {
+				System.out.println(ex.getMessage());
+			} catch (NoProperInfoException ex) {
+				System.out.println(ex.getMessage());
+			} catch (ValidationException ex) {
+				System.out.println("Beklenmedik bir hata oluştu.");
+			}
 		}
 	}
 	
 // 2-2-1-2
-	private void deleteCustomer(CustomerDTO fetchedCustomer) {
-		view.displayCustomerDeletePanel(fetchedCustomer);
+	private void deleteCustomerPanel(CustomerDTO fetchedCustomer) {
+		view.displaySpace();
+		view.displayDeleteCustomerView(fetchedCustomer);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteCustomer(fetchedCustomer);
-		} 
+			view.displaySpace();
+			System.out.println(fetchedCustomer.getUsername() + " kullanıcısı başarıyla silinmiştir.");
+		} else {
+			view.displaySpace();
+			System.out.println("Silme işleminiz iptal edilmiştir.");
+		}
 	}
 // 2-2-1-3
-	private void CreateAccount(CustomerDTO fetchedCustomer) {
-		view.displayCreateAccountPanel();
+	private void createAccountPanel(CustomerDTO fetchedCustomer) {
+		view.displaySpace();
+		view.displayCreateAccountView();
 		String accountType;
 		
 		loop:
@@ -333,12 +414,14 @@ public class BankController {
 		System.out.println("Hesap başarıyla oluşturuldu.");
 	}
 // 2-2-1-4
-	private void fetchAccountPanel(CustomerDTO fetchCustomer) {
-		Set<AccountDTO> accountList = adminService.fetchAccountList(fetchCustomer.getCustomerId());
-		fetchCustomer.setAccountList(accountList);
-	
+	private void listAccountPanel(CustomerDTO fetchCustomer) {
+		view.displaySpace();
+		
 		try {
-			view.displayAccountListPanel(accountList);
+			Set<AccountDTO> accountList = adminService.fetchAccountList(fetchCustomer.getCustomerId());
+			fetchCustomer.setAccountList(accountList);
+	
+			view.displayAccountListView(accountList);
 			AccountDTO fetchedAccount;
 			loop: 
 				while(true) {
@@ -351,51 +434,75 @@ public class BankController {
 					}
 					System.out.print("Hatalı hesap numarası girdiniz! Tekrar deneyiniz: ");
 				}
-			fetchAccountMenuPanel(fetchedAccount);
-		} catch(NullPointerException ex) {
-			System.out.println("Müşterinin hiç hesabı bulunmamaktadır.");
+			accountMenuPanel(fetchedAccount);
+		} catch(NoSuchClientException ex) {
+			System.out.println(ex.getMessage() + " Müşteri menüsüne dönülüyor.");
 		}
 		
 	}
 // 2-2-1-4-1
-	private void fetchAccountMenuPanel(AccountDTO fetchedAccount) {
-		view.displayFetchedAccountPanel(fetchedAccount);
+	private void accountMenuPanel(AccountDTO fetchedAccount) {
+		view.displaySpace();
+		view.displayFetchedAccountMenuView(fetchedAccount);
 		
 		loop:
 			while(true) {
 				switch(input.nextInt()) {
-				case UPDATE: updateAccount(fetchedAccount); break loop;
-				case DELETE: deleteAccount(fetchedAccount); break loop;
-				case TYPE: changeTypeAccount(fetchedAccount); break loop;
-				case TRANSACTION_HISTORY: accountHistory(fetchedAccount); break loop;
+				case UPDATE: updateBalancePanel(fetchedAccount); break loop;
+				case DELETE: deleteAccountPanel(fetchedAccount); break loop;
+				case TYPE: changeAccountTypePanel(fetchedAccount); break loop;
+				case TRANSACTION_HISTORY: accountHistoryPanel(fetchedAccount); break loop;
 				case BACK2: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}
 	}
 // 2-2-1-4-1-1
-	private void updateAccount(AccountDTO fetchedAccount) {
+	private void updateBalancePanel(AccountDTO fetchedAccount) {
+		view.displaySpace();
 		AccountDTO updatedAccount = acFactory.copy(fetchedAccount);
-		view.displayAccountBalanceUpdatePanel(fetchedAccount);
+		view.displayUpdateBalanceView(fetchedAccount);
+		String balance;
 		
-		double balance = input.nextDouble();
+			
+			while (true) {
+				balance = input.nextString();
+				try {
+					onlyNumberValidator.validate(balance);
+					break;
+				} catch (NoProperInfoException ex) {
+					System.out.print(ex.getMessage());
+					;
+				} catch (ValidationException ex) {
+					System.out.println("Beklenmeyen bir hata gerçekleşti.");
+				}
+			}
+			updatedAccount.setBalance(Double.parseDouble(balance));
+			adminService.updateAccount(updatedAccount);
+			System.out.println("Hesap bakiyesi " + balance + " olarak güncellenmiştir.");
+			
 		
-		updatedAccount.setBalance(balance);
-		adminService.updateAccount(updatedAccount);
+		
 		
 	}
 // 2-2-1-4-1-2
-	private void deleteAccount(AccountDTO fetchedAccount) {
-		view.displayAccountDeletePanel(fetchedAccount);
+	private void deleteAccountPanel(AccountDTO fetchedAccount) {
+		view.displaySpace();
+		view.displayDeleteAccountView(fetchedAccount);
 		
 		if(input.nextString().equalsIgnoreCase("y")) {
 			adminService.deleteAccount(fetchedAccount);
+			view.displaySpace();
+			System.out.println(fetchedAccount.getAccNumber() + " numaralı hesap başarıyla silinmiştir.");
+		} else {
+			view.displaySpace();
+			System.out.println("Silme işleminiz iptal edilmiştir.");
 		}
-		
 	}
 // 2-2-1-4-1-3
-	private void changeTypeAccount(AccountDTO fetchedAccount) {
-		view.displayAccountTypeChangePanel(fetchedAccount);
+	private void changeAccountTypePanel(AccountDTO fetchedAccount) {
+		view.displaySpace();
+		view.displayChangeAccountTypeView(fetchedAccount);
 		
 		String currentType = fetchedAccount.getClass().getSimpleName().replace("AccountDTO", "").toLowerCase();
 		AccountDTO updatedAccount;
@@ -416,10 +523,11 @@ public class BankController {
 		}
 	}
 // 2-2-1-4-1-4
-	private void accountHistory(AccountDTO fetchedAccount) {
+	private void accountHistoryPanel(AccountDTO fetchedAccount) {
+		view.displaySpace();
 		Set<TransactionHistoryDTO> history = 
 				adminService.fetchTransactionHistory (fetchedAccount.getAccNumber());
-		view.displayTransactionHistoryPanel(history);
+		view.displayTransactionHistoryView(history);
 		input.nextString();
 	}
 	
