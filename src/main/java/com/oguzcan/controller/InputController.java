@@ -1,5 +1,6 @@
 package com.oguzcan.controller;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InputController {
@@ -12,7 +13,7 @@ public class InputController {
 		String input = keyboard.nextLine();
 		return input;
 	}
-	public String nextString(String text) {
+	public String nextStringWithPrint(String text) {
 		System.out.print(text);
 		
 		String input = keyboard.nextLine();
@@ -20,10 +21,14 @@ public class InputController {
 	}
 	
 //  ################################### INT ####################################
-	public int nextInt() {
+	public int nextInt() throws InputMismatchException{
 		
 		int input = keyboard2.nextInt();
 		return input;
+	}
+	
+	public void renew() {
+		keyboard2 = new Scanner(System.in);
 	}
 	
 	public int nextInt(String text) {

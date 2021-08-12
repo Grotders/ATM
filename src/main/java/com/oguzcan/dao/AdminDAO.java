@@ -89,7 +89,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 		return adminDto;
 	}
 
-	@Override
+/*	
 	public AdminDTO retrieveById(int id) {
 		String sql = "select * from mydb.admin where admin_id";
 		
@@ -109,7 +109,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 		}
 		return adminDto;
 	}
-	
+*/
 
 	public Set<AdminDTO> retrieveAll() {
 		String sql = "select * from mydb.admin";

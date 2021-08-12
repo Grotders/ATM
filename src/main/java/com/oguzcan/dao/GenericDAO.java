@@ -14,7 +14,7 @@ public interface GenericDAO<T> {
 	void update(T t);
 	void delete(T t) throws NoSuchClientException;
 	T retrieve(String username) throws NoSuchClientException;  // primary key ile getirme
-	T retrieveById(int id);
+
 
 	
 	

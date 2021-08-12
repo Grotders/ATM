@@ -1,6 +1,7 @@
 package com.oguzcan.controller;
 
 
+import java.util.InputMismatchException;
 import java.util.Set;
 
 import com.oguzcan.dto.AccountDTO;
@@ -20,50 +21,37 @@ import com.oguzcan.factory.AdminFactory;
 import com.oguzcan.factory.AdminFactoryImpl;
 import com.oguzcan.factory.CustomerFactory;
 import com.oguzcan.factory.CustomerFactoryImpl;
-import com.oguzcan.service.AdminLoginService;
 import com.oguzcan.service.AdminService;
 import com.oguzcan.service.AdminServiceImpl;
-import com.oguzcan.service.LoginService;
-import com.oguzcan.util.validator.OnlyNumberValidator;
+import com.oguzcan.service.login.AdminLoginService;
+import com.oguzcan.service.login.LoginService;
+import com.oguzcan.util.validator.NumberValidator;
 import com.oguzcan.util.validator.Validator;
 import com.oguzcan.view.BankView;
 
 public class BankController {
 	private final BankView view = new BankView();
 	private final LoginService<AdminDTO> loginService = new AdminLoginService();
-	private final InputController input = new InputController();
+	private InputController input = new InputController();
 	private final AccountFactory acFactory = new AccountFactoryImpl();
 	private final AdminFactory aFactory = new AdminFactoryImpl();
 	private final CustomerFactory cFactory = new CustomerFactoryImpl();
 	private final AdminService adminService = new AdminServiceImpl();
 
-	private Validator onlyNumberValidator = new OnlyNumberValidator();
+	private Validator onlyNumberValidator = new NumberValidator();
 	
 	// Logged in user 
 	private AdminDTO loggedInAdmin;
 
-	// RUN-TIME Constant Pool
-	private final int CREATE = 1;
-	private final int FETCH = 2;
-	private final int ADMIN = 1;
-	private final int CUSTOMER = 2;
-	private final int BACK = 3;
-	private final int UPDATE = 1;
-	private final int DELETE = 2;
-	private final int CREATE_ACCOUNT = 3;
-	private final int FETCH_ACCOUNTS = 4;
-	private final int BACK2 = 5;
-	private final int BASIC = 1;
-	private final int BUSINESS = 2;
-	private final int TYPE = 3;
-	private final int TRANSACTION_HISTORY = 4;
-	private final String YES = "y";
-	
+	private final int MENU1 = -1;
+	private final int MENU2 =  1;
+	private final int MENU3 =  3;
+	private final int MENU4 =  9;
+//	private final int MENU5 = 13;
 	
 	public void init() {
 		while(true) {
 			view.displayWelcome();
-
 			login();
 		}
 	}
@@ -75,7 +63,6 @@ public class BankController {
  			loginService.login(username, password);
 */			
 			loggedInAdmin = loginService.login("oguzcan", "12345");
-			System.out.println("Giriş başarılı! Yönlendiriliyorsunuz ...");
 		} catch (WrongClientCredentialsException ex) {
 			System.out.println(ex.getMessage());
 		} catch (NoSuchClientException ex) {
@@ -83,33 +70,29 @@ public class BankController {
 			login();
 		}
 		
-		redirecting();
+		loginService.redirecting();
 		adminPanel();
 	}
 	
-	private void redirecting() {
-		try {
-			view.displaySpace();
-			Thread.sleep(3000);
-		} catch(InterruptedException e) {
-			System.out.println("Thread interrupted");
-		}
-	}
-
 	private void adminPanel() {
 		top:
 		while(true) {
-		view.displayAdminMenu();
-
-			loop:
-			while(true) {
-				switch(input.nextInt()) {
-					case CREATE: createPanel(); break loop;	// Enum yapısı eklenecek
-					case FETCH: fetchPanel(); break loop;
-					case BACK: logout(); break top;
-					default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
-				}		
-			}
+			view.displayAdminMenu();
+			
+			
+					loop:
+					while(true) {
+						try {
+							switch(adminService.getEnum(input.nextInt(), MENU1)) {
+								case CREATE: createPanel(); break loop;	// Enum yapısı eklenecek
+								case FETCH: fetchPanel(); break loop;
+								case EXIT: logout(); break top;
+								default: System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
+							}	
+						} catch (InputMismatchException ex) {
+							input = new InputController();
+						}
+					}
 		}
 	}
 
@@ -120,7 +103,7 @@ public class BankController {
 		while(true) {
 			view.displayAdminCreateView();
 			while(true) {
-				switch(input.nextInt()) {
+				switch(adminService.getEnum(input.nextInt(), MENU2)) {
 					case ADMIN: createAdminPanel(); break top;
 					case CUSTOMER: createCustomerPanel(); break top;
 					case BACK: break top;
@@ -133,8 +116,8 @@ public class BankController {
 	private void createAdminPanel() {
 		view.displayCreateAdminView();
 		
-		String username = input.nextString("Kullanıcı adı: ");
-		String password = input.nextString("Şifre: ");
+		String username = input.nextStringWithPrint("Kullanıcı adı: ");
+		String password = input.nextStringWithPrint("Şifre: ");
 		
 		AdminDTO admin = aFactory.create(username, password);
 		try {
@@ -146,18 +129,18 @@ public class BankController {
 		} catch (ClientAlreadyExistsException ex) {
 			System.out.println(ex.getMessage());
 		} catch (ValidationException ex) {
-			System.out.println(ex + "Beklenmedik bir hata meydana geldi.");
+			System.out.println(ex.getMessage());
 		}
 	}
 //  1-2
 	private void createCustomerPanel() {
 		view.displayCreateCustomerView();
 		
-		String username = input.nextString("Kullanıcı adı: ");
-		String password = input.nextString("Şifre: ");
-		String name = input.nextString("Müşteri adı: ");
-		String lastname = input.nextString("Müşteri soyadı: ");
-		String phoneNumber = input.nextString("Müşteri telefon numarası: ");
+		String username = input.nextStringWithPrint("Kullanıcı adı: ");
+		String password = input.nextStringWithPrint("Şifre: ");
+		String name = input.nextStringWithPrint("Müşteri adı: ");
+		String lastname = input.nextStringWithPrint("Müşteri soyadı: ");
+		String phoneNumber = input.nextStringWithPrint("Müşteri telefon numarası: ");
 		int customerId = 0;
 		
 		CustomerDTO customer = cFactory.create(username, password, customerId, name, lastname, phoneNumber);
@@ -172,7 +155,7 @@ public class BankController {
 		} catch (ClientAlreadyExistsException ex) {
 			System.out.println(ex.getMessage());
 		} catch (ValidationException ex) {
-			System.out.println(ex + "Beklenmedik bir hata meydana geldi.");
+			System.out.println(ex.getMessage());
 		}
 	}
 
@@ -184,9 +167,9 @@ public class BankController {
 				view.displayAdminFetchMenuView();
 				loop:
 					while(true) {
-						switch(input.nextInt()) {
+						switch(adminService.getEnum(input.nextInt(), MENU2)) {
 							case ADMIN: listAdminPanel(); break loop;
-							case FETCH: listCustomerPanel(); break loop;
+							case CUSTOMER: listCustomerPanel(); break loop;
 							case BACK: break top;
 							default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 						}
@@ -224,7 +207,7 @@ public class BankController {
 		view.displayFetchedAdminMenuView(fetchedAdmin);
 		loop:
 			while(true) {
-				switch(input.nextInt()) {
+				switch(adminService.getEnum(input.nextInt(), MENU4)) {
 				case UPDATE: updateAdminPanel(fetchedAdmin); break loop;
 				case DELETE: deleteAdminPanel(fetchedAdmin); break loop;
 				case BACK: break loop;
@@ -240,8 +223,8 @@ public class BankController {
 		loop:
 		while(true) {
 			updatedAdmin = aFactory.copy(fetchedAdmin);
-			String username = input.nextString("Kullanıcı adı: ");
-			String password = input.nextString("Şifre: ");
+			String username = input.nextStringWithPrint("Kullanıcı adı: ");
+			String password = input.nextStringWithPrint("Şifre: ");
 			
 			if(username == "" && password == "") {
 				System.out.println("Güncelleme işleminiz iptal edilmiştir."); break loop;
@@ -315,12 +298,12 @@ public class BankController {
 				view.displayFetchedCustomerMenuView(fetchedCustomer);
 				loop:
 					while(true) {
-						switch(input.nextInt()) {
+						switch(adminService.getEnum(input.nextInt(), MENU4)) {
 						case UPDATE: updateCustomerPanel(fetchedCustomer); break loop;
 						case DELETE: deleteCustomerPanel(fetchedCustomer); break top;
 						case CREATE_ACCOUNT: createAccountPanel(fetchedCustomer); break loop;
 						case FETCH_ACCOUNTS: listAccountPanel(fetchedCustomer); break loop;
-						case BACK2: break top;
+						case BACK: break top;
 						default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 						}
 					}
@@ -338,11 +321,11 @@ public class BankController {
 			updatedCustomer = cFactory.copy(fetchedCustomer);
 			System.out.println(fetchedCustomer);
 			System.out.println(updatedCustomer);
-			String username = input.nextString("Kullanıcı adı: ");
-			String password = input.nextString("Şifre: ");
-			String firstname = input.nextString("Adı: ");
-			String lastname = input.nextString("Soyadı: ");
-			String phoneNumber = input.nextString("Telefon numarası: ");
+			String username = input.nextStringWithPrint("Kullanıcı adı: ");
+			String password = input.nextStringWithPrint("Şifre: ");
+			String firstname = input.nextStringWithPrint("Adı: ");
+			String lastname = input.nextStringWithPrint("Soyadı: ");
+			String phoneNumber = input.nextStringWithPrint("Telefon numarası: ");
 			
 			if(username.equals("") && password.equals("") && firstname.equals("") 
 					&& lastname.equals("") && phoneNumber.equals("") ) {
@@ -403,7 +386,7 @@ public class BankController {
 		while(true) {
 			int option = input.nextInt();
 
-			switch (option){
+			switch (adminService.getEnum(option, MENU3)){
 			case BASIC:  accountType = "basic"; break loop;
 			case BUSINESS: accountType = "business"; break loop;
 			default : System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
@@ -447,12 +430,12 @@ public class BankController {
 		
 		loop:
 			while(true) {
-				switch(input.nextInt()) {
+				switch(adminService.getEnum(input.nextInt(), MENU4)) {
 				case UPDATE: updateBalancePanel(fetchedAccount); break loop;
 				case DELETE: deleteAccountPanel(fetchedAccount); break loop;
 				case TYPE: changeAccountTypePanel(fetchedAccount); break loop;
 				case TRANSACTION_HISTORY: accountHistoryPanel(fetchedAccount); break loop;
-				case BACK2: break loop;
+				case BACK: break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 				}
 			}

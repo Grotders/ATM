@@ -3,24 +3,18 @@ package com.oguzcan.dto;
 import java.io.Serializable;
 import java.util.Set;
 
-public class CustomerDTO implements Serializable, User, Comparable<Object>{
+public class CustomerDTO extends UserDTO  implements Serializable, Comparable<Object>{
 	private static final long serialVersionUID = -898475110260482733L;
 
 	private Set<AccountDTO> accountList;  // TreeSet
-	private String username;
-	private String password;
 	private PersonalInformationDTO info;
 	private int customerId;
 
 	public CustomerDTO(Builder builder) {
+		super(builder.username, builder.password);
 		this.accountList = builder.accountList;
-		this.username = builder.username;
-		this.password = builder.password;
 		this.info = builder.info;
 		this.customerId = builder.customerId;
-	}
-	public CustomerDTO() {
-		
 	}
 
 //  ############################### INNER CLASS ################################
@@ -62,18 +56,6 @@ public class CustomerDTO implements Serializable, User, Comparable<Object>{
 	}
 	public void setAccountList(Set<AccountDTO> accountList) {
 		this.accountList = accountList;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 	public PersonalInformationDTO getInfo() {
 		return info;

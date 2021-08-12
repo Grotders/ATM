@@ -29,7 +29,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			stmt.executeUpdate();
 		} catch (SQLException ex) {
 			System.out.println(ex);
-			System.out.println(ex.getMessage()+ "ACCDAO BRO");
+			System.out.println(ex.getMessage());
 		}
 		return 0;
 	}
@@ -103,8 +103,8 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 		return accountDto;
 	}
 
-	@Override // accountNo
-	public AccountDTO retrieveById(int id) {
+// accountNo
+/*	public AccountDTO retrieveById(int id) {
 		String sql = "select * from mydb.account where accountNo=?";
 		Set<AccountDTO> accountList = new TreeSet<AccountDTO>();
 		
@@ -132,7 +132,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 		}
 		return accountDto;
 	}
-
+*/
 
 	public Set<AccountDTO> retrieveAll(int customerId) {
 		String sql = "select * from mydb.account where customer_id = ?";
@@ -195,11 +195,11 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				String date;
 				history = new TransactionHistoryDTO.Builder()
 						.transactionId(rs.getInt("transaction_id"))
 						.transactionType(rs.getString("transaction_type"))
-						.accountNumber(rs.getInt("account_number")).build();
+						.accountNumber(rs.getInt("account_number"))
+						.transactionDate(rs.getString("transaction_date")).build();
 				historyList.add(history);
 			}
 		} catch (SQLException ex) {

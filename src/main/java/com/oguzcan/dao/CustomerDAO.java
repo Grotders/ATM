@@ -17,8 +17,6 @@ import com.oguzcan.ex.NoSuchClientException;
 public class CustomerDAO implements GenericDAO<CustomerDTO>{
 	private ResultSet rs;
 	private CustomerDTO customerDto;
-	private AccountDTO accountDto;
-	private AccountDAO accountDao;
 	private PreparedStatement stmt;
 	
 	// a lot of problems
@@ -79,9 +77,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			stmt.setInt(4, customer.getCustomerId());
 			stmt.executeUpdate();
 			
-			System.out.println("Güncelleme başarılı.");
 		} catch(SQLException ex) {
-			System.out.println("hata update");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
@@ -112,9 +108,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			stmt.setInt(1, customer.getCustomerId());
 			stmt.executeUpdate();
 			
-			System.out.println("Kullanıcı başarıyla silindi.");
 		} catch (SQLException ex) {
-			System.out.println("hata delete");
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}
@@ -122,21 +116,22 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 
 
 	@Override
-	public CustomerDTO retrieve(String input) throws NoSuchClientException{
+	public CustomerDTO retrieve(String username) throws NoSuchClientException{
 		String sql = "SELECT * FROM mydb.customer inner join mydb.info "
 				+ "on customer.customer_id = info.customer_id "
 				+ "where customer.username = ?";
 		
 		try (Connection connection = dbConnection()) {
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, input);
+			stmt.setString(1, username);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
 				PersonalInformationDTO info = new PersonalInformationDTO.Builder()
 						.name(rs.getString("first_name")).lastname("last_name").phoneNumber("phone_number").build();
 				customerDto = new CustomerDTO.Builder()
-						.accountList(null).username(rs.getString("username")).password(rs.getString("password")).info(info).build();
+						.accountList(null).customerId(rs.getInt("customer_id")).username(rs.getString("username"))
+						.password(rs.getString("password")).info(info).build();
 			}
 			if(customerDto == null) {
 				throw new NoSuchClientException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
@@ -148,7 +143,7 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		return customerDto;
 	}
 
-	@Override
+/*	
 	public CustomerDTO retrieveById(int id){
 		String sql = "SELECT * FROM mydb.customer inner join mydb.info "
 				+ "on customer.customer_id = info.customer_id "
@@ -171,16 +166,13 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 		}
 		return customerDto;
 	}
-
-
+*/
+/*
 	public int bringId(CustomerDTO customer) throws NoSuchClientException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-//	String sql = "SELECT * FROM mydb.customer inner join mydb.info "
-//			+ "on customer.customer_id = info.customer_id "
-//			+ "where customer.customer_id = ?";
-	
+*/
 
 	public Set<CustomerDTO> retrieveAll() {
 		String sql = "select * from mydb.customer inner join mydb.info "

@@ -1,4 +1,4 @@
-package com.oguzcan.service;
+package com.oguzcan.service.login;
 
 import com.oguzcan.dao.AdminDAO;
 import com.oguzcan.dao.GenericDAO;
@@ -18,6 +18,7 @@ public class AdminLoginService implements LoginService<AdminDTO>{
 		AdminDTO admin = adminDao.retrieve(username);
 		System.out.println(admin);
 		loginAdmin(admin, password);
+		
 		
 		return admin;
 	}

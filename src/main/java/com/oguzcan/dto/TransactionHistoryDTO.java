@@ -77,9 +77,7 @@ public class TransactionHistoryDTO implements Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return "No: " + transactionId + " " + transactionType + " " + accountNumber;
+		return "#" + transactionId + " \t" + transactionType + " \t" + transactionDate;
 	}
-	
-	
 	
 }

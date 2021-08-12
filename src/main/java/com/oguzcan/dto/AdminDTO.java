@@ -1,21 +1,15 @@
 package com.oguzcan.dto;
 
-public class AdminDTO implements User, Comparable<Object>{
+public class AdminDTO extends UserDTO implements Comparable<Object>{
 
-	private String username;
-	private String password;
 	private int adminId;
 	
 	
 	public AdminDTO(Builder builder) {
-		this.username = builder.username;
-		this.password = builder.password;
+		super(builder.username, builder.password);
 		this.adminId = builder.adminId;
 	}
 	
-	public AdminDTO() {
-		
-	}
 	
 //  ############################### INNER CLASS ################################
 	public static class Builder {
@@ -41,18 +35,7 @@ public class AdminDTO implements User, Comparable<Object>{
 	}
 
 //	######################  GETTER & SETTER ################################
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
 	public int getAdminId() {
 		return adminId;
 	}
@@ -74,6 +57,6 @@ public class AdminDTO implements User, Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return  adminId + " " + username + " " + password;
+		return  adminId + " " + super.getUsername() + " " + super.getPassword();
 	}
 }

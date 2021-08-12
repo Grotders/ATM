@@ -2,6 +2,7 @@ package com.oguzcan.service;
 
 import java.util.Set;
 
+import com.oguzcan.controller.MenuAdminEnums;
 import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.dto.CustomerDTO;
@@ -27,7 +28,7 @@ public interface AdminService{
 	public Set<AdminDTO> fetchAdminList() throws NoSuchClientException;
 	public Set<CustomerDTO> fetchCustomerList() throws NoSuchClientException;
 	public Set<AccountDTO> fetchAccountList(int customerId) throws NoSuchClientException;
-	public Set<TransactionHistoryDTO> fetchTransactionHistory(int customerId);
+	public Set<TransactionHistoryDTO> fetchTransactionHistory(int accountNumber);
 	
 	public void updateAccount(AccountDTO updatedAccount);
 	public void updateAdmin(AdminDTO updatedAdmin) throws NoProperUsernameException, NoProperPasswordException, 
@@ -39,5 +40,5 @@ public interface AdminService{
 	void deleteAccount(AccountDTO account) ;
 	void deleteCustomer(CustomerDTO customer) ;
 	
-	
+	MenuAdminEnums getEnum(int index, int plus);
 }

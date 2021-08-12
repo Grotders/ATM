@@ -39,6 +39,9 @@ public abstract class AccountDTO implements Serializable, Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return accNumber + "=> bakiye: " + balance + " hesap tipi: " + getAccountType();
+		if(getAccountType().equals("basic"))
+			return "(normal)     | \t\t" + accNumber + " \t   |  " + balance + " TL";
+		else
+			return "(ticari)     | \t\t" + accNumber + " \t   |  " + balance + " TL";
 	}
 }

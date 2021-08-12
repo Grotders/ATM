@@ -11,7 +11,10 @@ public class BankView {
 
 	
 	public void displayWelcome() {
-		System.out.println("Unicorn Bankasının Admin Sistemine Hoşgeldiniz!\n");
+		System.out.println("#*******************************************************#");
+		System.out.println("#    Unicorn Bankasının Admin Sistemine Hoşgeldiniz!    #");
+		System.out.println("#*******************************************************#\n");
+		
 		System.out.println("Giriş yapınız:");
 	}
 	
@@ -19,7 +22,7 @@ public class BankView {
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
 		System.out.println("2-) Kullanıcı incele.");
-		System.out.println("3-) Çıkış yap.");
+		System.out.println("8-) Çıkış yap.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 
@@ -28,7 +31,7 @@ public class BankView {
 		System.out.println("Admin Panel: Kullanıcı oluştur.\n");
 		System.out.println("1-) Admin oluştur.");
 		System.out.println("2-) Müşteri oluştur.");
-		System.out.println("3-) Geri.");
+		System.out.println("9-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 1-1
@@ -50,7 +53,7 @@ public class BankView {
 		System.out.println("İncelemek istediğiniz kullanıcının tipini seçiniz: ");
 		System.out.println("1-) Admin ");
 		System.out.println("2-) Müşteri ");
-		System.out.println("3-) Geri");		
+		System.out.println("9-) Geri");		
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1
@@ -72,7 +75,7 @@ public class BankView {
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
 		System.out.println("2-) Kullanıcıyı sil.");
-		System.out.println("3-) Geri.");
+		System.out.println("9-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-1-1
@@ -107,7 +110,7 @@ public class BankView {
 		System.out.println("2-) Kullanıcıyı sil.");
 		System.out.println("3-) Kullanıcıya hesap oluştur. (Basic, Business)");
 		System.out.println("4-) Kullanıcı hesaplarını incele.");
-		System.out.println("5-) Geri.");
+		System.out.println("9-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	
@@ -154,7 +157,8 @@ public class BankView {
 		System.out.println("1-) Hesabın bakiyesini değiştir.");
 		System.out.println("2-) Hesabı sil");
 		System.out.println("3-) Hesap tipini değiştir. (Basic->Business, Business->Basic)");
-		System.out.println("4-) Geri.");
+		System.out.println("4-) Hesap geçmişini göster. ");
+		System.out.println("9-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-2-3-1-1
@@ -178,11 +182,11 @@ public class BankView {
 	}
 	// 2-1-2-4
 	public void displayTransactionHistoryView(Set<TransactionHistoryDTO> history) {
-		System.out.println("Admin Panel: Hesap İşlem geçmişi.");
-		System.out.println("Hesabın işlem geçmişi asağıda görüntülenmektedir.");
+		System.out.println("Admin Panel: Hesap İşlem geçmişi. \n");
+		System.out.println("Hesabın işlem geçmişi asağıda görüntülenmektedir.\n");
 		for(TransactionHistoryDTO temp: history) 
 			System.out.println(temp);
-		System.out.println("Devam etmek için herhangi bir tuşa basınız.");
+		System.out.println("\nDevam etmek için herhangi bir tuşa basınız.");
 	}
 	public void displaySpace() {
 		System.out.println("\n\n\n\n\n\n");

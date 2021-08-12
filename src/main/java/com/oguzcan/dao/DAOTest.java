@@ -30,7 +30,7 @@ public class DAOTest {
 		
 		
 // 	Transaction Tests
-//		test.createTransactionTest();
+		test.createTransactionTest();
 //		test.transactionList();
 	}
 	

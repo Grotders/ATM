@@ -24,7 +24,8 @@ public class Test {
 //		}
 		
 		Test test = new Test();
-		test.interestingTest();
+		test.test5();
+//		test.interestingTest();
 	}
 	public void test5 () {
 		while (true) { // public enum Menu {CREATE,UPDATE,BACK,MISMATCH;}
@@ -32,7 +33,8 @@ public class Test {
 				case CREATE:System.out.println("Oluştur"); break;		// 1
 				case UPDATE: System.out.println("Güncelle"); break;	// 2
 				case BACK: System.out.println("GERİ"); break;			// 3
-				case MISMATCH: System.out.println("Hata"); break;
+				default: System.out.println("Hata"); break;
+				
 			}
 		}
 	}
@@ -46,8 +48,6 @@ public class Test {
 	
 	public void interestingTest() {
 		String x = "3.5";
-		
-		double y;
 		
 		System.out.println(Double.parseDouble(x));
 	}
