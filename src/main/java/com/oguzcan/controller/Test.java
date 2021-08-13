@@ -22,9 +22,10 @@ public class Test {
 //				System.out.println("OLMADI");
 //			}
 //		}
-		
+		String a = "1 ";
+		int b = Integer.parseInt(a);
 		Test test = new Test();
-		test.test5();
+//		test.test5();
 //		test.interestingTest();
 	}
 	public void test5 () {

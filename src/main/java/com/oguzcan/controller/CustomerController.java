@@ -13,8 +13,6 @@ import com.oguzcan.ex.NoSuchAccountException;
 import com.oguzcan.ex.NoSuchClientException;
 import com.oguzcan.ex.ValidationException;
 import com.oguzcan.ex.WrongClientCredentialsException;
-import com.oguzcan.service.AdminService;
-import com.oguzcan.service.AdminServiceImpl;
 import com.oguzcan.service.CustomerServiceImpl;
 import com.oguzcan.service.login.CustomerLoginService;
 import com.oguzcan.service.login.LoginService;
@@ -158,38 +156,81 @@ public class CustomerController {
 	}
 
 	private void transferPanel() {
-
+		try {
+			selectAccountPanel("EFT");
+		} catch (BackPreviousMenuException ex) {
+			return;
+		} 
+		
+		view.displaySpace();
+		view.displayEFT1View();
+		
+		while (true) {
+			try {
+				String target = input.nextString();
+				customerService.verifyAccountNumber(target);
+				view.displayEFT2View();
+				String amount = input.nextString();
+				customerService.eft(currentAccount, target, amount);
+				view.displaySuccessView();
+				customerService.redirecting();
+				view.displaySpace();
+				break;
+			} catch (NoProperNumberException | InsufficientFundsException | NoSuchClientException ex) {
+				view.displaySpace();
+				view.displayDepositView();
+				System.out.println(ex.getMessage());
+				System.out.println("-->");
+			} catch (ValidationException ex) {
+				view.displaySpace();
+				view.displayDepositView();
+				System.out.println("Beklenmedik bir hatayla karşılaşıldı.");
+				System.out.println("-->");
+			}
+		}
 	}
 
 	private void balanceInquiryPanel() {
-
+		
 	}
 
 	private void transactionHistoryPanel() {
-
+		try {
+			selectAccountPanel("EFT");
+		} catch (BackPreviousMenuException ex) {
+			return;
+		} 
+		
+		Set<TransactionHistoryDTO> history = customerService.findHistory(currentAccount);
+		view.displaySpace();
+		view.displayFetchAccountHistoryView(history);
+		input.nextString();
 	}
 
 	private void applicationPanel() {
-
+		view.displayApplicationView();
+		input.nextString();
+		view.displaySuccessView();
+		customerService.redirecting();
 	}
 
 	private void accountSettingsPanel() {
-
-	}
-
-	private void testView() {
-		AdminService adminService = new AdminServiceImpl();
-//		view.displayCustomerMenu();
-//		view.displayDepositView();
-//		view.displayWithdrawView();
-		try {
-			Set<AccountDTO> list = adminService.fetchAccountList(1);
-			view.displayFetchAccountView(list, "Test bu");
-		} catch (NoSuchClientException ex) {
-			System.out.println(ex.getMessage());
+		view.displayAccountSettingsView();
+		switch (input.nextString()) {
+		case "1": passwordChangePanel();
+		default: System.out.println("Hatalı seçim yapıldı. Ana menüye dönülüyor.");
 		}
-
-		Set<TransactionHistoryDTO> history = adminService.fetchTransactionHistory(15);
-		view.displayFetchAccountHistoryView(history);
+	}
+	
+	private void passwordChangePanel() {
+		view.displayChangePasswordMenu();
+		
+		while(true) {
+			try {
+				customerService.changePassword(loggedInCustomer, input.nextString());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
 	}
 }

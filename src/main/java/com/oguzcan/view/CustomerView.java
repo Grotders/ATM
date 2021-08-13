@@ -65,17 +65,7 @@ public class CustomerView {
 //	------------------
 //	---------------------------
 
-	public void displayDepositView() {
-		sb = new StringBuilder();
-		sb.append("\t\t\t").append("-".repeat(70)).append("\n");
-		sb.append("\t\t\t").append("|").append("\t\t   ").append("Unicorn ATM BANK: Para yatırma").append("\t\t").append("     |\n");
-		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
-		sb.append("\t\t\t").append("|").append("\t   ").append(" Yatırılacak tutarı giriniz:").append("\t\t\t\t").append("     |\n");
-		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
-		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
-		sb.append("--> ");
-		System.out.print(sb.toString());
-	}
+	
 	
 	// Para Çekme
 	// Para Yatırma
@@ -102,6 +92,18 @@ public class CustomerView {
 		sb.append(sb2);
 		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
 		sb.append("\t\t\t").append("|").append("\t   ").append("0. Geri").append("\t\t\t\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
+		sb.append("--> ");
+		System.out.print(sb.toString());
+	}
+	
+	public void displayDepositView() {
+		sb = new StringBuilder();
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n");
+		sb.append("\t\t\t").append("|").append("\t\t   ").append("Unicorn ATM BANK: Para yatırma").append("\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append(" Yatırılacak tutarı giriniz:").append("\t\t\t\t").append("     |\n");
 		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
 		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
 		sb.append("--> ");
@@ -153,17 +155,60 @@ public class CustomerView {
 		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
 		sb2 = new StringBuilder();
 		for(TransactionHistoryDTO temp: history) {
-			sb2.append("\t\t\t").append("|").append("\t   ").append(temp);
-			if(temp.toString().length() > 50) {
+			sb2.append("\t\t\t").append("|").append(" ").append(temp);
+			if(temp.toString().length() > 55) {
 				sb2.append("").append("     |").append(temp.toString().length() + "\n");
 			}
-			else {
+			else if(temp.toString().length() > 50) {
 				sb2.append("\t").append("     |").append(temp.toString().length() + "\n");
+			}
+			else if (temp.toString().length() > 33){
+				sb2.append("\t\t\t").append("     |").append(temp.toString().length() + "\n");
+			} else {
+				sb2.append("\t\t\t\t").append("     |").append(temp.toString().length() + "\n");
 			}
 		}
 		sb.append(sb2);
 		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
 		sb.append("\t\t\t").append("|").append("\t   ").append("0. Geri").append("\t\t\t\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
+		sb.append("--> ");
+		System.out.print(sb.toString());
+	}
+	
+	public void displayApplicationView() {
+		sb = new StringBuilder();
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n");
+		sb.append("\t\t\t").append("|").append("\t\t   ").append("Unicorn ATM BANK: Başvuru").append("\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append("1. Kredi başvurusu").append("\t\t\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append("2. Yeni hesap başvurusu").append("\t\t\t\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append("3. Limit yükseltme başvurusu").append("\t\t\t\t\t\t").append("     |\n");		
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
+		sb.append("--> ");
+		System.out.print(sb.toString());
+	}
+	
+	public void displayAccountSettingsView() {
+		sb = new StringBuilder();
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n");
+		sb.append("\t\t\t").append("|").append("\t\t   ").append("Unicorn ATM BANK: Hesap Ayarları").append("\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append("1. Şifre değiştirme").append("\t\t\t\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
+		sb.append("--> ");
+		System.out.print(sb.toString());
+	}
+	
+	public void displayChangePasswordMenu() {
+		sb = new StringBuilder();
+		sb.append("\t\t\t").append("-".repeat(70)).append("\n");
+		sb.append("\t\t\t").append("|").append("\t\t   ").append("Unicorn ATM BANK: Şifre Değiştirme").append("\t\t").append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
+		sb.append("\t\t\t").append("|").append("\t   ").append("Yeni şifrenizi giriniz: ").append("\t\t\t\t\t").append("     |\n");
 		sb.append("\t\t\t").append("|").append("\t".repeat(8)).append("     |\n");
 		sb.append("\t\t\t").append("-".repeat(70)).append("\n\n");
 		sb.append("--> ");
@@ -181,21 +226,9 @@ public class CustomerView {
 		sb.append("--> ");
 		System.out.print(sb.toString());
 	}
-	public static void main(String[] args) {
-		CustomerView view = new CustomerView();
-		view.displayEFT1View();
-		view.displayEFT2View();
-	}
+	
+	
 	public void displaySpace() {
 		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-	}
-	
-	public void displayTestView() {
-		displayCustomerMenu();
-		this.displayCustomerMenu();
-		this.displayDepositView();
-		this.displayEFT1View();
-		this.displayEFT2View();
-		this.displayWithdrawView();
 	}
 }

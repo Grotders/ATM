@@ -11,7 +11,7 @@ public class InputController {
 	public String nextString() {
 		
 		String input = keyboard.nextLine();
-		return input;
+		return input.trim();
 	}
 	public String nextStringWithPrint(String text) {
 		System.out.print(text);
