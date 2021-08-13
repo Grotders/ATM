@@ -16,9 +16,7 @@ public class AdminLoginService implements LoginService<AdminDTO>{
 			throws WrongClientCredentialsException, NoSuchClientException {
 		
 		AdminDTO admin = adminDao.retrieve(username);
-		System.out.println(admin);
 		loginAdmin(admin, password);
-		
 		
 		return admin;
 	}
@@ -26,7 +24,6 @@ public class AdminLoginService implements LoginService<AdminDTO>{
 	private void loginAdmin(AdminDTO admin, String password) 
 			throws WrongClientCredentialsException{
 		
-	//	passwordValidator.validate(password);
 		checkAdminPassword(admin, password);
 		
 	}
@@ -38,11 +35,4 @@ public class AdminLoginService implements LoginService<AdminDTO>{
 			throw new WrongClientCredentialsException("Parola Hatalı");
 		}
 	}
-
-	@Override
-	public void logout() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

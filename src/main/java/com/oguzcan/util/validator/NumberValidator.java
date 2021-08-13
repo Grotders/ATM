@@ -1,22 +1,24 @@
 package com.oguzcan.util.validator;
 
-import com.oguzcan.ex.NoProperInfoException;
+import com.oguzcan.ex.NoProperNumberException;
 
 public class NumberValidator implements Validator{
 
 	@Override
-	public void validate(String info) throws NoProperInfoException {
-		info = info.trim();
+	public void validate(String info) throws NoProperNumberException {
 		int lenght = info.length();
 		
-		
 		if(info.contains("-"))
-			throw new NoProperInfoException("Girdiğiniz değer negatif olmamalıdır. Tekrar deneyiniz: ");
+			throw new NoProperNumberException("Girdiğiniz değer negatif olmamalıdır. ");
+		
+		if(lenght > 18) {
+			throw new NoProperNumberException("Girdiğiniz sayı çok uzun. Lütfen daha kısa sayılar giriniz.");
+		}
 		
 		for(int i=0; i < lenght; i++) {
 			char c = info.charAt(i);
 			if(Character.isLetter(c)) {
-				throw new NoProperInfoException(" Girdiğiniz değer harf içeremez. Tekrar deneyiniz.");
+				throw new NoProperNumberException("Girdiğiniz değer harf içeremez. ");
 			}
 		}
 

@@ -19,7 +19,7 @@ import com.oguzcan.util.validator.NumberValidator;
 import com.oguzcan.util.validator.PasswordValidator;
 import com.oguzcan.util.validator.Validator;
 
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl extends AbstractService implements CustomerService{
 	Validator numberValidator = new NumberValidator();
 	Validator passwordValidator = new PasswordValidator();
 	CustomerDAO customerDao = new CustomerDAO();
@@ -83,7 +83,6 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 	
 	public AccountDTO findAccount(Set<AccountDTO> list, int accountNumber) throws NoSuchAccountException{
-		
 		for(AccountDTO temp : list) {
 			if(temp.getAccNumber() == accountNumber)
 				return temp;
@@ -110,7 +109,7 @@ public class CustomerServiceImpl implements CustomerService{
 			return;
 		
 		numberValidator.validate(target);
-		int accountNumber = Integer.parseInt(target.trim());
+
 		AccountDTO account = accountDao.retrieve(target);
 	}
 	

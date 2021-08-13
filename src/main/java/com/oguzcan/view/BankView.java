@@ -22,7 +22,7 @@ public class BankView {
 		System.out.println("Admin Panel:\n");
 		System.out.println("1-) Kullanıcı oluştur.");
 		System.out.println("2-) Kullanıcı incele.");
-		System.out.println("8-) Çıkış yap.");
+		System.out.println("0-) Çıkış yap.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 
@@ -31,7 +31,7 @@ public class BankView {
 		System.out.println("Admin Panel: Kullanıcı oluştur.\n");
 		System.out.println("1-) Admin oluştur.");
 		System.out.println("2-) Müşteri oluştur.");
-		System.out.println("9-) Geri.");
+		System.out.println("0-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 1-1
@@ -53,7 +53,7 @@ public class BankView {
 		System.out.println("İncelemek istediğiniz kullanıcının tipini seçiniz: ");
 		System.out.println("1-) Admin ");
 		System.out.println("2-) Müşteri ");
-		System.out.println("9-) Geri");		
+		System.out.println("0-) Geri");		
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1
@@ -75,7 +75,7 @@ public class BankView {
 		System.out.println("Gerçekleştirmek istediğiniz işlemi seçiniz:");
 		System.out.println("1-) Kullanıcı bilgilerini güncelle.");
 		System.out.println("2-) Kullanıcıyı sil.");
-		System.out.println("9-) Geri.");
+		System.out.println("0-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-1-1
@@ -110,7 +110,7 @@ public class BankView {
 		System.out.println("2-) Kullanıcıyı sil.");
 		System.out.println("3-) Kullanıcıya hesap oluştur. (Basic, Business)");
 		System.out.println("4-) Kullanıcı hesaplarını incele.");
-		System.out.println("9-) Geri.");
+		System.out.println("0-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	
@@ -158,7 +158,7 @@ public class BankView {
 		System.out.println("2-) Hesabı sil");
 		System.out.println("3-) Hesap tipini değiştir. (Basic->Business, Business->Basic)");
 		System.out.println("4-) Hesap geçmişini göster. ");
-		System.out.println("9-) Geri.");
+		System.out.println("0-) Geri.");
 		System.out.print("\nSeçiminizi giriniz: ");
 	}
 	// 2-1-2-3-1-1
@@ -188,7 +188,11 @@ public class BankView {
 			System.out.println(temp);
 		System.out.println("\nDevam etmek için herhangi bir tuşa basınız.");
 	}
+	public void displayError() {
+		displaySpace();
+		System.out.println("Seçiminiz hatalı tekrar deneyiniz.");
+	}
 	public void displaySpace() {
-		System.out.println("\n\n\n\n\n\n");
+		System.out.println("\n\n\n\n\n\n\n\n\n");
 	}
 }

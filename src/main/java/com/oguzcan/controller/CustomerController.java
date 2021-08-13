@@ -23,34 +23,36 @@ public class CustomerController {
 	private final CustomerView view = new CustomerView();
 	private final LoginService<CustomerDTO> loginService = new CustomerLoginService();
 	private final CustomerServiceImpl customerService = new CustomerServiceImpl();
-	private InputController input = new InputController();
+	private final InputController input = new InputController();
 
 	private CustomerDTO loggedInCustomer;
 	private AccountDTO currentAccount;
 	
-	public void init() {
-		while (true) {
+	public final void init() {
 			login();
-		}
 	}
 
-	public void login() {
+	public final void login() {
 		try {
-			// view.displayLogin2Menu("oguzcan");
-			loggedInCustomer = loginService.login("oguzcan", "12345");
+			view.displayLogin1Menu();
+			String username = input.nextString();
+			view.displaySpace();
+			view.displayLogin2Menu(username);
+			String password = input.nextString();
+			loggedInCustomer = loginService.login(username, password);
+			view.displaySpace();
+			//loggedInCustomer = loginService.login("oguzcan", "12345");
+			customerPanel();
 		} catch (WrongClientCredentialsException ex) {
 			System.out.println(ex.getMessage());
 		} catch (NoSuchClientException ex) {
 			System.out.println(ex.getMessage());
 			login();
 		}
-
-//		loginService.redirecting();
-		customerPanel();
-//		testView();
+		loginService.redirecting();
 	}
 
-	private void customerPanel() {
+	private final void customerPanel() {
 		top: while (true) {
 			view.displayCustomerMenu();
 
@@ -62,12 +64,17 @@ public class CustomerController {
 			case "5": transactionHistoryPanel();break;
 			case "6": applicationPanel();break;
 			case "7": accountSettingsPanel();break;
-			case "0": loginService.logout();break top;
+			case "0": logout(); break top;
 			default:  System.out.println("geçersiz işlem");
 			}
 		}
 	}
-	private void selectAccountPanel(String message) throws BackPreviousMenuException{
+	private void logout() {
+		loggedInCustomer = null;
+		currentAccount = null;		
+	}
+
+	private final void selectAccountPanel(String message) throws BackPreviousMenuException{
 		view.displayFetchAccountView(loggedInCustomer.getAccountList(), message);
 		Set<AccountDTO> accountList = loggedInCustomer.getAccountList();
 		int accountId;
@@ -91,7 +98,7 @@ public class CustomerController {
 		}
 	}
 
-	private void depositPanel() {
+	private final void depositPanel() {
 		try {
 			selectAccountPanel("Para Yatırma");
 		} catch (BackPreviousMenuException ex) {
@@ -124,7 +131,7 @@ public class CustomerController {
 		
 	}
 
-	private void withdrawPanel() {
+	private final void withdrawPanel() {
 		try {
 			selectAccountPanel("Para Çekme");
 		} catch (BackPreviousMenuException ex) {
@@ -155,7 +162,7 @@ public class CustomerController {
 		}
 	}
 
-	private void transferPanel() {
+	private final void transferPanel() {
 		try {
 			selectAccountPanel("EFT");
 		} catch (BackPreviousMenuException ex) {
@@ -190,11 +197,11 @@ public class CustomerController {
 		}
 	}
 
-	private void balanceInquiryPanel() {
+	private final void balanceInquiryPanel() {
 		
 	}
 
-	private void transactionHistoryPanel() {
+	private final void transactionHistoryPanel() {
 		try {
 			selectAccountPanel("EFT");
 		} catch (BackPreviousMenuException ex) {
@@ -207,14 +214,14 @@ public class CustomerController {
 		input.nextString();
 	}
 
-	private void applicationPanel() {
+	private final void applicationPanel() {
 		view.displayApplicationView();
 		input.nextString();
 		view.displaySuccessView();
 		customerService.redirecting();
 	}
 
-	private void accountSettingsPanel() {
+	private final void accountSettingsPanel() {
 		view.displayAccountSettingsView();
 		switch (input.nextString()) {
 		case "1": passwordChangePanel();
@@ -222,7 +229,7 @@ public class CustomerController {
 		}
 	}
 	
-	private void passwordChangePanel() {
+	private final void passwordChangePanel() {
 		view.displayChangePasswordMenu();
 		
 		while(true) {

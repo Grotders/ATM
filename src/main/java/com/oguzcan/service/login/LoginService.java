@@ -17,6 +17,4 @@ public interface LoginService <T extends User> {
 			System.out.println("Thread interrupted");
 		}
 	}
-	
-	public void logout();
 }

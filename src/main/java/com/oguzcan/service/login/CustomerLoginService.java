@@ -26,7 +26,6 @@ public class CustomerLoginService implements LoginService<CustomerDTO>{
 			throws WrongClientCredentialsException{
 		
 		checkCustomerPassword(customer, password);
-		
 	}
 	
 	private void checkCustomerPassword(CustomerDTO customer, String password) 
@@ -36,12 +35,4 @@ public class CustomerLoginService implements LoginService<CustomerDTO>{
 			throw new WrongClientCredentialsException("Parola Hatalı");
 		}
 	}
-	
-
-	@Override
-	public void logout() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

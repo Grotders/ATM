@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.CustomerDTO;
@@ -49,7 +50,10 @@ public class CustomerDAO implements GenericDAO<CustomerDTO>{
 			stmt.executeUpdate();
 		} catch (MySQLIntegrityConstraintViolationException ex) {
 			throw new ClientAlreadyExistsException("Kullanıcı adı kullanımda. Farklı kullanıcı adıyla tekrar deneyiniz!");
-		} catch (SQLException ex) {
+		} catch (MysqlDataTruncation ex) {
+			System.out.println(ex.getMessage());
+			System.out.println("Girdilerinizden biri çok uzun. Lütfen daha kısa birşeyler deneyiniz.");
+		}catch (SQLException ex) {
 			System.out.println(ex);
 			System.out.println(ex.getMessage());
 		}

@@ -13,12 +13,18 @@ public class AccountFactoryImpl implements AccountFactory{
 		
 		if(accountType.equals("business")) {
 			return new BusinessAccountDTO.Builder()
-					.accNumber(accNumber).balance(balance).customerId(customerId).build();
+					.accNumber(accNumber)
+					.balance(balance)
+					.customerId(customerId)
+					.build();
 		}
 		
 		// basic account
 		return new BasicAccountDTO.Builder()
-					.accNumber(accNumber).balance(balance).customerId(customerId).build();
+					.accNumber(accNumber)
+					.balance(balance)
+					.customerId(customerId)
+					.build();
 	}
 
 	@Override
@@ -27,14 +33,17 @@ public class AccountFactoryImpl implements AccountFactory{
 		
 		if(accountType.equals("business")) {
 			return new BusinessAccountDTO.Builder()
-					.accNumber(account.getAccNumber()).balance(account.getBalance())
-					.customerId(account.getCustomerId()).build();
+					.accNumber(account.getAccNumber())
+					.balance(account.getBalance())
+					.customerId(account.getCustomerId())
+					.build();
 		}
 		
 		// basic account
 		return new BasicAccountDTO.Builder()
-				.accNumber(account.getAccNumber()).balance(account.getBalance())
-				.customerId(account.getCustomerId()).build();
+				.accNumber(account.getAccNumber())
+				.balance(account.getBalance())
+				.customerId(account.getCustomerId())
+				.build();
 	}
-	
 }
