@@ -33,11 +33,9 @@ public class DatabaseUtil {
 		return connection;
 
 	}
-
 	public static void main(String[] args) {
 		DatabaseUtil databaseUtil = new DatabaseUtil();
 		databaseUtil.databaseConnectionDb();
 	}
-
 }
 

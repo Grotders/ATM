@@ -16,15 +16,22 @@ public class CustomerFactoryImpl implements CustomerFactory{
 	
 		
 		PersonalInformationDTO info = new PersonalInformationDTO.Builder()
-				.name(name).lastname(lastname).phoneNumber(phoneNumber).build();
+				.name(name)
+				.lastname(lastname)
+				.phoneNumber(phoneNumber)
+				.build();
 		
 		Set<AccountDTO> aList = new HashSet<AccountDTO>();
 		AccountDTO account = aFactory.create(0, 0.0, "basic",0);
 		aList.add(account);
 		
 		CustomerDTO customer = new CustomerDTO.Builder()
-				.accountList(aList).username(username)
-				.password(password).info(info).customerId(customerId).build();
+				.customerId(customerId)
+				.username(username)
+				.password(password)
+				.info(info)
+				.accountList(aList)
+				.build();
 		
 		return customer;
 	}
@@ -34,12 +41,18 @@ public class CustomerFactoryImpl implements CustomerFactory{
 		PersonalInformationDTO info = customer.getInfo();
 		
 		PersonalInformationDTO newInfo = new PersonalInformationDTO.Builder()
-				.name(info.getName()).lastname(info.getLastname()).phoneNumber(info.getPhoneNumber()).build();
+				.name(info.getName())
+				.lastname(info.getLastname())
+				.phoneNumber(info.getPhoneNumber())
+				.build();
 		
 		CustomerDTO copyCustomer = new CustomerDTO.Builder()
-				.accountList(customer.getAccountList()).username(customer.getUsername())
-				.password(customer.getPassword()).info(newInfo)
-				.customerId(customer.getCustomerId()).build();
+				.customerId(customer.getCustomerId())
+				.username(customer.getUsername())
+				.password(customer.getPassword())
+				.info(newInfo)
+				.accountList(customer.getAccountList())
+				.build();
 
 		return copyCustomer;
 	}

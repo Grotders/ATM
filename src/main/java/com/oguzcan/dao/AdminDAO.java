@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.oguzcan.dto.AdminDTO;
 import com.oguzcan.ex.ClientAlreadyExistsException;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 
 public class AdminDAO implements GenericDAO<AdminDTO> {
 	private ResultSet rs;
@@ -66,7 +66,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 	}
 
 	@Override
-	public AdminDTO retrieve(String input) throws NoSuchClientException{
+	public AdminDTO retrieve(String input) throws NoSuchUserException{
 		String sql = "select * from mydb.admin where username=?";
 		
 		try (Connection connection = dbConnection()) {
@@ -80,7 +80,7 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 						.adminId(rs.getInt("admin_id")).build();
 			}
 			if(adminDto == null) {
-				throw new NoSuchClientException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
+				throw new NoSuchUserException("Böyle bir kullanıcı yok. Tekrar deneyiniz!\n");
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
@@ -88,28 +88,6 @@ public class AdminDAO implements GenericDAO<AdminDTO> {
 		}
 		return adminDto;
 	}
-
-	@Override
-	public AdminDTO retrieveById(int id) {
-		String sql = "select * from mydb.admin where admin_id";
-		
-		try (Connection connection = dbConnection()) {
-			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, id);
-			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				adminDto = new AdminDTO.Builder()
-						.username(rs.getString("username")).password(rs.getString("password"))
-						.adminId(rs.getInt("admin_id")).build();
-			}
-		} catch (SQLException ex) {
-			System.out.println(ex);
-			System.out.println(ex.getMessage());
-		}
-		return adminDto;
-	}
-	
 
 	public Set<AdminDTO> retrieveAll() {
 		String sql = "select * from mydb.admin";

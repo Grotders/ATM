@@ -12,10 +12,7 @@ public class PasswordValidator implements Validator{
 			throw new NoProperPasswordException("Şifreniz boş olamaz. Tekrar deneyiniz.");
 		}
 
-
 		if(length < 5 || length > 18) {
-			System.out.println(password);
-			System.out.println(length);
 			throw new NoProperPasswordException("Şifreniz en az 5 karakter ve en fazla 18 karakter olmalıdır. Tekrar deneyiniz.");
 		}
 	}
