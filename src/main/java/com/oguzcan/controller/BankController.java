@@ -55,15 +55,15 @@ public class BankController {
 //  0
 	private void login() {
 		try {
-//			System.out.print("Kullanıcı adı: ");
-//			String username = input.nextString();
-//			System.out.print("Şifre: ");
-//			String password = input.nextString();
-//			
-			view.displaySpace();
-// 			loginService.login(username, password);
+			System.out.print("Kullanıcı adı: ");
+			String username = input.nextString();
+			System.out.print("Şifre: ");
+			String password = input.nextString();
 			
-			loggedInAdmin = loginService.login("oguzcan", "12345");
+			view.displaySpace();
+ 			loginService.login(username, password);
+			
+//			loggedInAdmin = loginService.login("oguzcan", "12345");
 			
 			loginService.redirecting();
 			adminPanel();
@@ -79,7 +79,7 @@ public class BankController {
 			switch(adminService.getEnum(input.nextString(), MENU1)) {
 				case CREATE: createPanel(); break;
 				case FETCH: fetchPanel(); break;
-				case BACK: logout(); break loop;
+				case BACK:  logout(); break loop;
 				default: view.displayError();
 			}	
 			view.displayAdminMenu();
@@ -95,7 +95,7 @@ public class BankController {
 			switch(adminService.getEnum(input.nextString(), MENU2)) {
 				case ADMIN: createAdminPanel(); break loop;
 				case CUSTOMER: createCustomerPanel(); break loop;
-				case BACK: break loop;
+				case BACK: view.displaySpace(); break loop;
 				default: view.displayError();
 			}
 			view.displayAdminCreateView();
@@ -196,7 +196,7 @@ public class BankController {
 			switch(adminService.getEnum(input.nextString(), MENU4)) {
 				case UPDATE: updateAdminPanel(fetchedAdmin); break loop;
 				case DELETE: deleteAdminPanel(fetchedAdmin); break loop;
-				case BACK: break loop;
+				case BACK: view.displaySpace(); break loop;
 				default: view.displayError();
 			}	
 			view.displayFetchedAdminMenuView(fetchedAdmin);
@@ -282,7 +282,7 @@ public class BankController {
 				case DELETE: deleteCustomerPanel(fetchedCustomer); break loop;
 				case CREATE_ACCOUNT: createAccountPanel(fetchedCustomer); break;
 				case FETCH_ACCOUNTS: listAccountPanel(fetchedCustomer); break;
-				case BACK: break loop;
+				case BACK: view.displaySpace(); break loop;
 				default: System.out.println("Seçiminiz hatalı tekrar deneyiniz!");
 			}			
 			view.displayFetchedCustomerMenuView(fetchedCustomer);
@@ -403,7 +403,7 @@ public class BankController {
 				case DELETE: deleteAccountPanel(fetchedAccount); return;
 				case TYPE: changeAccountTypePanel(fetchedAccount); return;
 				case TRANSACTION_HISTORY: accountHistoryPanel(fetchedAccount); return;
-				case BACK: return;
+				case BACK: view.displaySpace(); return;
 				default: view.displayError();
 			}		
 		}
@@ -483,11 +483,9 @@ public class BankController {
 	
 // 3
 	private void logout() {
+		view.displaySpace();
 		loggedInAdmin = null;
 	}
-	
-	private void testBank() {
-		
-	}
+
 	
 }
