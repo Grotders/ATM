@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`customer` (
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `customer_id_UNIQUE` (`customer_id` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 16
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`account` (
     FOREIGN KEY (`customer_id`)
     REFERENCES `mydb`.`customer` (`customer_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 17
+AUTO_INCREMENT = 26
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`admin` (
   UNIQUE INDEX `admin_id_UNIQUE` (`admin_id` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 41190
+AUTO_INCREMENT = 41199
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`info` (
     FOREIGN KEY (`customer_id`)
     REFERENCES `mydb`.`customer` (`customer_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`transaction_history` (
     FOREIGN KEY (`account_number`)
     REFERENCES `mydb`.`account` (`account_number`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 15
+AUTO_INCREMENT = 30
 DEFAULT CHARACTER SET = utf8mb3;
 
 
