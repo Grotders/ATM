@@ -55,15 +55,15 @@ public class BankController {
 //  0
 	private void login() {
 		try {
-//			System.out.print("Kullanıcı adı: ");
-//			String username = input.nextString();
-//			System.out.print("Şifre: ");
-//			String password = input.nextString();
-//			
-			view.displaySpace();
-// 			loginService.login(username, password);
+			System.out.print("Kullanıcı adı: ");
+			String username = input.nextString();
+			System.out.print("Şifre: ");
+			String password = input.nextString();
 			
-			loggedInAdmin = loginService.login("oguzcan", "12345");
+			view.displaySpace();
+			loginService.login(username, password);
+			
+//			loggedInAdmin = loginService.login("oguzcan", "12345");
 			
 			loginService.redirecting();
 			adminPanel();
@@ -485,9 +485,4 @@ public class BankController {
 	private void logout() {
 		loggedInAdmin = null;
 	}
-	
-	private void testBank() {
-		
-	}
-	
 }
