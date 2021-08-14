@@ -10,7 +10,7 @@ import com.oguzcan.ex.InsufficientFundsException;
 import com.oguzcan.ex.NoProperInfoException;
 import com.oguzcan.ex.NoProperNumberException;
 import com.oguzcan.ex.NoSuchAccountException;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 import com.oguzcan.ex.ValidationException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 import com.oguzcan.service.CustomerServiceImpl;
@@ -43,12 +43,9 @@ public class CustomerController {
 			view.displaySpace();
 			//loggedInCustomer = loginService.login("oguzcan", "12345");
 			customerPanel();
-		} catch (WrongClientCredentialsException ex) {
+		} catch (WrongClientCredentialsException | NoSuchUserException ex) {
 			System.out.println(ex.getMessage());
-		} catch (NoSuchClientException ex) {
-			System.out.println(ex.getMessage());
-			login();
-		}
+		} 
 		loginService.redirecting();
 	}
 
@@ -60,10 +57,9 @@ public class CustomerController {
 			case "1": depositPanel(); break;
 			case "2": withdrawPanel();break;
 			case "3": transferPanel();break;
-			case "4": balanceInquiryPanel();break;
-			case "5": transactionHistoryPanel();break;
-			case "6": applicationPanel();break;
-			case "7": accountSettingsPanel();break;
+			case "4": transactionHistoryPanel();break;
+			case "5": applicationPanel();break;
+			case "6": accountSettingsPanel();break;
 			case "0": logout(); break top;
 			default:  System.out.println("geçersiz işlem");
 			}
@@ -183,7 +179,7 @@ public class CustomerController {
 				customerService.redirecting();
 				view.displaySpace();
 				break;
-			} catch (NoProperNumberException | InsufficientFundsException | NoSuchClientException ex) {
+			} catch (NoProperNumberException | InsufficientFundsException | NoSuchUserException ex) {
 				view.displaySpace();
 				view.displayDepositView();
 				System.out.println(ex.getMessage());
@@ -195,10 +191,6 @@ public class CustomerController {
 				System.out.println("-->");
 			}
 		}
-	}
-
-	private final void balanceInquiryPanel() {
-		
 	}
 
 	private final void transactionHistoryPanel() {

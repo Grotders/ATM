@@ -13,7 +13,6 @@ import com.oguzcan.ex.NoProperNumberException;
 import com.oguzcan.ex.NoProperPasswordException;
 import com.oguzcan.ex.NoProperUsernameException;
 import com.oguzcan.ex.NoSuchAccountException;
-import com.oguzcan.ex.NoSuchClientException;
 import com.oguzcan.ex.NoSuchUserException;
 import com.oguzcan.ex.ValidationException;
 import com.oguzcan.ex.WrongClientCredentialsException;
@@ -56,21 +55,19 @@ public class BankController {
 //  0
 	private void login() {
 		try {
-			System.out.print("Kullanıcı adı: ");
-			String username = input.nextString();
-			System.out.print("Şifre: ");
-			String password = input.nextString();
-			
+//			System.out.print("Kullanıcı adı: ");
+//			String username = input.nextString();
+//			System.out.print("Şifre: ");
+//			String password = input.nextString();
+//			
 			view.displaySpace();
- 			loginService.login(username, password);
+// 			loginService.login(username, password);
 			
-	//		loggedInAdmin = loginService.login("oguzcan", "12345");
+			loggedInAdmin = loginService.login("oguzcan", "12345");
 			
 			loginService.redirecting();
 			adminPanel();
-		} catch (WrongClientCredentialsException ex) {
-			System.out.println(ex.getMessage());
-		} catch (NoSuchClientException ex) {
+		} catch (WrongClientCredentialsException | NoSuchUserException ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
@@ -165,7 +162,7 @@ public class BankController {
 			switch(adminService.getEnum(input.nextString(), MENU2)) {
 				case ADMIN: listAdminPanel(); break;
 				case CUSTOMER: listCustomerPanel(); break;
-				case BACK: break loop;
+				case BACK: view.displaySpace(); break loop;
 				default: view.displayError();
 			}
 			view.displayAdminFetchMenuView();
@@ -488,4 +485,9 @@ public class BankController {
 	private void logout() {
 		loggedInAdmin = null;
 	}
+	
+	private void testBank() {
+		
+	}
+	
 }

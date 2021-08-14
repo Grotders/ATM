@@ -3,7 +3,7 @@ package com.oguzcan.service.login;
 import com.oguzcan.dao.AdminDAO;
 import com.oguzcan.dao.GenericDAO;
 import com.oguzcan.dto.AdminDTO;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 
 public class AdminLoginService implements LoginService<AdminDTO>{
@@ -13,7 +13,7 @@ public class AdminLoginService implements LoginService<AdminDTO>{
 	
 	@Override
 	public AdminDTO login(String username, String password) 
-			throws WrongClientCredentialsException, NoSuchClientException {
+			throws WrongClientCredentialsException, NoSuchUserException {
 		
 		AdminDTO admin = adminDao.retrieve(username);
 		loginAdmin(admin, password);

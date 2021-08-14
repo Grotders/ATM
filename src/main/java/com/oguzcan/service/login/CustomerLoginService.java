@@ -4,7 +4,7 @@ import com.oguzcan.dao.AccountDAO;
 import com.oguzcan.dao.CustomerDAO;
 import com.oguzcan.dao.GenericDAO;
 import com.oguzcan.dto.CustomerDTO;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 
 public class CustomerLoginService implements LoginService<CustomerDTO>{
@@ -14,7 +14,7 @@ public class CustomerLoginService implements LoginService<CustomerDTO>{
 	
 	@Override
 	public CustomerDTO login(String username, String password) 
-			throws WrongClientCredentialsException, NoSuchClientException {
+			throws WrongClientCredentialsException, NoSuchUserException {
 			
 		CustomerDTO customer = customerDao.retrieve(username);
 		loginCustomer(customer, password);

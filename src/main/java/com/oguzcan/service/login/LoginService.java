@@ -1,12 +1,12 @@
 package com.oguzcan.service.login;
 
 import com.oguzcan.dto.User;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 import com.oguzcan.ex.WrongClientCredentialsException;
 
 public interface LoginService <T extends User> {
 	
-	public T login(String username, String password) throws WrongClientCredentialsException, NoSuchClientException;
+	public T login(String username, String password) throws WrongClientCredentialsException, NoSuchUserException;
 	
 	default void redirecting() {
 		try {

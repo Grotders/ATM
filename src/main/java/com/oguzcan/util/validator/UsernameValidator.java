@@ -18,6 +18,19 @@ public class UsernameValidator implements Validator{
 					+ "Tekrar deneyiniz.");
 		}
 		
+		
+		for(int i=0; i<lenght; i++) {
+			char c = username.charAt(i);
+			if(Character.isLetter(c) || Character.isDigit(c)) {
+				
+			}
+		}
+		
+		if(username.matches("[^A-Za-z0-9 ]")) {
+			throw new NoProperUsernameException("Kullanıcı adınız sadece harf ve rakamlardan oluşabilir.");
+		}
+		
+		// At least one character needed
 		boolean flag = false;
 		for(int i=0; i < lenght; i++) {
 			char c = username.charAt(i);

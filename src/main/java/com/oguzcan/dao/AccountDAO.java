@@ -11,7 +11,7 @@ import com.oguzcan.dto.AccountDTO;
 import com.oguzcan.dto.BasicAccountDTO;
 import com.oguzcan.dto.BusinessAccountDTO;
 import com.oguzcan.dto.TransactionHistoryDTO;
-import com.oguzcan.ex.NoSuchClientException;
+import com.oguzcan.ex.NoSuchUserException;
 
 public class AccountDAO implements GenericDAO<AccountDTO> {
 	private ResultSet rs;
@@ -73,7 +73,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 	}
 
 	@Override // account_number
-	public AccountDTO retrieve(String input) throws NoSuchClientException{
+	public AccountDTO retrieve(String input) throws NoSuchUserException{
 		String sql = "select * from mydb.account where account_number=?";
 		
 		try (Connection connection = dbConnection()) {
@@ -94,7 +94,7 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 				
 			}
 			if(accountDto == null) {
-				throw new NoSuchClientException("Böyle bir hesap yok. Tekrar deneyiniz!\n");
+				throw new NoSuchUserException("Böyle bir hesap yok. Tekrar deneyiniz!\n");
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex);
@@ -102,37 +102,6 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 		}
 		return accountDto;
 	}
-
-// accountNo
-/*	public AccountDTO retrieveById(int id) {
-		String sql = "select * from mydb.account where accountNo=?";
-		Set<AccountDTO> accountList = new TreeSet<AccountDTO>();
-		
-		try (Connection connection = dbConnection()) {
-			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, id);
-			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				if(rs.getString("account_type").equals("basic")) {
-					accountDto = new BasicAccountDTO.Builder()
-							.accNumber(rs.getInt("account_number")).balance(rs.getDouble("balance"))
-							.customerId(rs.getInt("customer_id")).build();
-					
-				} else if(rs.getString("account_type").equals("business")) {
-					accountDto = new BusinessAccountDTO.Builder()
-							.accNumber(rs.getInt("account_number")).balance(rs.getDouble("balance"))
-							.customerId(rs.getInt("customer_id")).build();
-					accountList.add(accountDto);
-				}
-			}
-		} catch (SQLException ex) {
-			System.out.println(ex);
-			System.out.println(ex.getMessage());
-		}
-		return accountDto;
-	}
-*/
 
 	public Set<AccountDTO> retrieveAll(int customerId) {
 		String sql = "select * from mydb.account where customer_id = ?";
@@ -163,7 +132,6 @@ public class AccountDAO implements GenericDAO<AccountDTO> {
 		}
 		return accountList;
 	}
-//	String sql = "insert into mydb.account(balance, account_type, customer_id) values(?,?,?)";
 
 	public void createTransaction(String type, int accountNumber) {
 		String sql = "insert into mydb.transaction_history(transaction_type, transaction_date, account_number) values(?,?,?)";

@@ -17,7 +17,7 @@ import com.oguzcan.ex.ValidationException;
 
 public interface AdminService{
 	
-
+	public void createAccount(AccountDTO account) ;
 	
 	public void createAdmin(AdminDTO admin) throws ClientAlreadyExistsException, NoProperUsernameException,
 					NoProperPasswordException, ValidationException;
@@ -25,11 +25,10 @@ public interface AdminService{
 	public void createCustomer(CustomerDTO customer) throws ClientAlreadyExistsException, 
 					NoProperPasswordException, ValidationException;
 	
-	public void createAccount(AccountDTO account) ;
 	
+	public Set<AccountDTO> fetchAccountList(int customerId) throws NoSuchUserException;
 	public Set<AdminDTO> fetchAdminList() throws NoSuchUserException;
 	public Set<CustomerDTO> fetchCustomerList() throws NoSuchUserException;
-	public Set<AccountDTO> fetchAccountList(int customerId) throws NoSuchUserException;
 	public Set<TransactionHistoryDTO> fetchTransactionHistory(int accountNumber);
 	
 	public void updateAccount(AccountDTO updatedAccount);
@@ -38,17 +37,19 @@ public interface AdminService{
 	public void updateCustomer(CustomerDTO updatedCustomer) throws NoProperUsernameException, NoProperPasswordException, 
 					ValidationException ;
 	
-	void deleteAdmin(AdminDTO admin) ;
-	void deleteAccount(AccountDTO account) ;
-	void deleteCustomer(CustomerDTO customer) ;
+	
+	public void deleteAccount(AccountDTO account) ;
+	public void deleteAdmin(AdminDTO admin) ;
+	public void deleteCustomer(CustomerDTO customer) ;
+	
 	
 	public MenuAdminEnums getEnum(String index, int plus);
 	
+	public AccountDTO findAccount(Set<AccountDTO> list, String accountNumber) throws NoProperNumberException, NoSuchAccountException,
+	ValidationException ;
+	
 	public AdminDTO findAdmin(Set<AdminDTO> list, String adminId)  throws NoSuchUserException, NoProperNumberException, 
 					ValidationException;
-	
-	public AccountDTO findAccount(Set<AccountDTO> list, String accountNumber) throws NoProperNumberException, NoSuchAccountException,
-					ValidationException ;
 	
 	public CustomerDTO findCustomer(Set<CustomerDTO> list, String customerId)  throws NoSuchUserException, NoProperNumberException, 
 					ValidationException;

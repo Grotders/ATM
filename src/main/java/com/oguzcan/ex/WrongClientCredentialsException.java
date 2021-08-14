@@ -7,3 +7,4 @@ public class WrongClientCredentialsException extends Exception {
 		super(message);
 	}
 }
+
